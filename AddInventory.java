@@ -10,7 +10,7 @@ public class AddInventory {
 	
 	ScreenClear sc = new ScreenClear();
 	Scanner scan = new Scanner(System.in);
-	Db db = new Db();
+	Db db;
 	FileIO fileio = new FileIO();
 	Set<String> set; 														//키 값을 저장하는 set
 	Iterator<String> it; 													//set 검색을 위한 iterator
@@ -18,10 +18,12 @@ public class AddInventory {
 	String catecode, procode, today, ep_date, price;						//상품의 카테고리 코드, 상품코드, 오늘 날짜, 유통기한, 가격
 	int procount, last_num, epd_value;   									//추가할 개수생성된 개수, 유통기한 설정 값
 	boolean check;															//검색 성공 여부 확인
-	private HashMap<String, NameInfo> products = db.getNames();				//상품이름 저장하는 리스트
+	private HashMap<String, NameInfo> products;								//상품이름 저장하는 리스트
 	
-	public AddInventory()
+	public AddInventory(Db db)
 	{
+		this.db = db;
+		products = db.getNames();	
 		today = db.getLast_date();
 		System.out.print("추가할 상품의 이름을 입력해주세요: ");
 		proname = scan.next();
