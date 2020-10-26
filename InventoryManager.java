@@ -8,7 +8,7 @@ public class InventoryManager {
 	Scanner scan = new Scanner(System.in);
 	ScreenClear sc = new ScreenClear();
 	int menu;
-	public InventoryManager() throws InterruptedException, IOException	//생성자
+	public InventoryManager(Db db) throws InterruptedException, IOException	//생성자
 	{
 		do
 		{	
@@ -23,15 +23,15 @@ public class InventoryManager {
 			{
 			case 1:			//1. 상품등록
 				sc.ScreenClear();
-				ProductRegister pr = new ProductRegister();
+				ProductRegister pr = new ProductRegister(db);
 				break;
 			case 2:			//2. 재고추가
 				sc.ScreenClear();
-				AddInventory ai = new AddInventory();
+				AddInventory ai = new AddInventory(db);
 				break;
 			case 3:			//3. 폐기등록
 				sc.ScreenClear();
-				DisposalRegister dr = new DisposalRegister();
+				DisposalRegister dr = new DisposalRegister(db);
 				break;
 			case 4:			//4. 종료
 				System.out.println("재고관리을 종료합니다.");
