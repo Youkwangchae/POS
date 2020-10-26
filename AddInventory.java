@@ -53,7 +53,7 @@ public class AddInventory {
 		}
 		else			//검색 성공
 		{
-			catecode = products.get(proname).getCate_code();
+			catecode = products.get(proname).getName_code();
 			last_num = products.get(proname).getLast_num();
 			epd_value = products.get(proname).getEpd_value();
 			price = Integer.toString(products.get(proname).getPrice());
