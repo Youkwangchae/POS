@@ -11,15 +11,16 @@ public class DisposalRegister {
 	
 	ScreenClear sc = new ScreenClear();
 	Scanner scan = new Scanner(System.in);
-	Db db = new Db();
+	Db db;
 	FileIO fileio = new FileIO();
 	Set<String> set; 														//키 값을 저장하는 set
 	Iterator<String> it; 													//set 검색을 위한 iterator
 	String key, today;														//Set에서 검색을 위한 스트링 변수, 오늘 날짜
 	boolean check;															//검색 성공 여부 확인
 	
-	public DisposalRegister() throws InterruptedException, IOException
+	public DisposalRegister(Db db) throws InterruptedException, IOException
 	{
+		this.db = db;
 		today = db.getLast_date();
 		ShowDisposal(today);
 		System.out.println("재고 관리로 돌아갑니다.");

@@ -11,18 +11,21 @@ public class ProductRegister
 {
 	
 	Scanner scan = new Scanner(System.in);
-	Db db = new Db();
+	Db db;
 	FileIO fileio = new FileIO();
 	Set<String> set; 		//키 값을 저장하는 set
 	Iterator<String> it; 	//set 검색을 위한 iterator
-	private HashMap<String, NameInfo> products = db.getNames();			//상품이름 저장하는 리스트
-	private HashMap<String, CategoryInfo> categorys = db.getCategorys();	//카테고리를 저장하는 리스트
+	private HashMap<String, NameInfo> products;		//상품이름 저장하는 리스트
+	private HashMap<String, CategoryInfo> categorys;	//카테고리를 저장하는 리스트
 	String key, proname, catename, code, ep_value, price;		//HashMap 검색을 위한 스트링, 입력받는 상품명, 입력받는 카테고리명, 생성된 카테고리 코드, 유통기한 설정 값, 가격
 	boolean check;						//검색 성공하면 true, 아니면 false
 	ScreenClear sc = new ScreenClear();
 	
-	public ProductRegister() throws InterruptedException, IOException
+	public ProductRegister(Db db) throws InterruptedException, IOException
 	{
+		this.db = db;
+		products = db.getNames();
+		categorys = db.getCategorys();
 		System.out.print("등록할 상품명을 입력해주세요: ");
 		proname = scan.next();
 		
