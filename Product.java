@@ -1,9 +1,9 @@
 package sw.pos;
 
 public class Product {
-	private String name, code, ep_date;//ìƒí’ˆëª…, ìƒí’ˆ ì½”ë“œ, ìœ í†µê¸°í•œ
-	private int price;//ê°€ê²©
-	boolean isPayByCash;//í˜„ê¸ˆê²°ì¬ ì—¬ë¶€. trueë©´ í˜„ê¸ˆê²°ì œ, falseë©´ ì¹´ë“œê²°ì œ
+	private String name, code, ep_date;//»óÇ°¸í, »óÇ° ÄÚµå, À¯Åë±âÇÑ
+	private int price;//°¡°İ
+	boolean isPayByCash;//Çö±İ°áÀç ¿©ºÎ. true¸é Çö±İ°áÁ¦, false¸é Ä«µå°áÁ¦
 	public Product(String code, String name, String ep_date, String price) {
 		super();
 	    this.name = name;

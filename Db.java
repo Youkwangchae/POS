@@ -87,7 +87,7 @@ public class Db {
 		for(int i=0; i<names.size(); i++) {
 			key = it.next();
 			String str = key + "/" + names.get(key).getName_code() + "/" + names.get(key).getLast_num();
-			str += "/" + names.get(key).getEpd_value()+ names.get(key).getPrice() +"\n";
+			str += "/" + names.get(key).getEpd_value()+ "/" + names.get(key).getPrice() +"\n";
 			contents.add(str);
 		}
 		fileio.writeFile("PName.txt", contents);
@@ -145,7 +145,13 @@ public class Db {
 			str+= list.get(i).getCode();
 			str+="/"+list.get(i).getName();
 			str+="/"+list.get(i).getEpdate();
-			str+="/"+list.get(i).getPrice()+"\n";
+			str+="/"+list.get(i).getPrice();
+			if(list.get(i).getIsPayByCash()==true) {
+				str+="/1\n";
+			}
+			else {
+				str+="/0\n";
+			}
 		}
 		str+="@\n";
 		fileio.writeFile("PaymentList.txt", str);

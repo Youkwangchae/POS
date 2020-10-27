@@ -113,6 +113,7 @@ public class FileIO {
 			Scanner scan = new Scanner(file);
 			while(scan.hasNextLine()) {
 				ArrayList<Product> list = new ArrayList<>();
+				int i=0;
 				String str = "";
 				String code = scan.nextLine();
 				while(scan.hasNextLine()) {
@@ -121,6 +122,12 @@ public class FileIO {
 						break;
 					StringTokenizer token = new StringTokenizer(str, "/");
 					list.add(new Product(token.nextToken(), token.nextToken(), token.nextToken(), token.nextToken()));
+					if(token.nextToken().equals("1")) {
+						list.get(i).setPayByCash(true);
+					}
+					else {
+						list.get(i).setPayByCash(false);
+					}
 				}
 				pays.put(code, list);
 			}
