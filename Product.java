@@ -1,14 +1,16 @@
 package sw.pos;
 
 public class Product {
-	private String name, code, ep_date;//»óÇ°¸í, »óÇ° ÄÚµå, À¯Åë±âÇÑ
-	private int price;//°¡°İ
+	private String name, code, ep_date;//ìƒí’ˆëª…, ìƒí’ˆ ì½”ë“œ, ìœ í†µê¸°í•œ
+	private int price;//ê°€ê²©
+	boolean isPayByCash;//í˜„ê¸ˆê²°ì¬ ì—¬ë¶€. trueë©´ í˜„ê¸ˆê²°ì œ, falseë©´ ì¹´ë“œê²°ì œ
 	public Product(String code, String name, String ep_date, String price) {
 		super();
 	    this.name = name;
 	    this.code = code;
 	    this.ep_date = ep_date;
 	    this.price = Integer.parseInt(price);
+	    this.isPayByCash = true;
 	}
 
 	public String getName() {
@@ -25,6 +27,14 @@ public class Product {
 
 	public int getPrice() {
 		return price;
+	}
+
+	public boolean getIsPayByCash() {
+		return isPayByCash;
+	}
+
+	public void setPayByCash(boolean isPayByCash) {
+		this.isPayByCash = isPayByCash;
 	}
 
 	@Override
