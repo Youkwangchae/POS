@@ -1,51 +1,45 @@
 package sw.pos;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class Manager {
 	Scanner scan = new Scanner(System.in);
-	String date;//ë‚ ì§œ ì…ë ¥ë°›ìŒ.
+	String date;//³¯Â¥ ÀÔ·Â¹ŞÀ½.
+	String m_date; //20XX_YY_ZZ
+	Db db;
 	public void menu() throws InterruptedException, IOException{
 		while(true) {
-		System.out.println("ì¢…ë£Œí•˜ì‹œë ¤ë©´ \"ì¢…ë£Œ\"ë¥¼ ì…ë ¥í•´ì£¼ì„¸ìš”");
-		System.out.print("ë‚ ì§œì…ë ¥ : ");
+		System.out.println("Á¾·áÇÏ½Ã·Á¸é \"Á¾·á\"¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä");
+		System.out.print("³¯Â¥ÀÔ·Â : ");
 		date = scan.next();
-		if(date.equals("ì¢…ë£Œ")) {
-			//System.out.println("POSê¸° ì‘ë™ ì¢…ë£Œ");
+		if(date.equals("Á¾·á")) {
 			return;
 		}
 		
 		else if(isPossible(date))	
 		{
 			Db db = new Db();
-			if(db.isPossible(date))//ì´ì „ ë‚ ì§œì¸ì§€ í™•ì¸.
+			if(db.isPossible(date, 2))//ÀÌÀü ³¯Â¥ÀÎÁö È®ÀÎ.
 			{
-				System.out.println(db.setLast_date(date));//ì˜¬ë°”ë¥¸ ë‚ ì§œì„ì„ í™•ì¸í–ˆìœ¼ë‹ˆ Date.txtì— ë„£ê³ , ë©”ì¸ë©”ë‰´ë¡œ ë“¤ì–´ì˜´.
-				start(db);//ë©”ì¸ ë©”ë‰´ ë³´ì—¬ì£¼ê¸°.
+				m_date = db.setLast_date(date);//¿Ã¹Ù¸¥ ³¯Â¥ÀÓÀ» È®ÀÎÇßÀ¸´Ï Date.txt¿¡ ³Ö°í, ¸ŞÀÎ¸Ş´º·Î µé¾î¿È.
+				start(db);//¸ŞÀÎ ¸Ş´º º¸¿©ÁÖ±â.
 			}
 		}
 		
 		}
 		
-		//Db db = new Db(date);
-		//db.addProduct(new Product("BBAAAA", "ì½”ì¹´ì½œë¼", "20201101", "2000"));
-		//db.removeProduct("BBAAAA");
-		//db.addNames("ì¡°ë¦¬í");
-		//db.addNames("ì½”ì¹´ì½œë¼", "BBAA", 20);
-		//db.setCash(50000, 10, false);
-		//db.removePayment("201025001", "AAAAAC");
-		//System.out.println("Done");
 	}
-	//ì˜¬ë°”ë¥¸ ë‚ ì§œ ì…ë ¥ì¸ì§€ íŒë‹¨. ìˆ«ìê°€ ì•„ë‹Œ ì…ë ¥ë„ ê±¸ëŸ¬ì¤¬ìŒ.
+	//¿Ã¹Ù¸¥ ³¯Â¥ ÀÔ·ÂÀÎÁö ÆÇ´Ü. ¼ıÀÚ°¡ ¾Æ´Ñ ÀÔ·Âµµ °É·¯ÁáÀ½.
 	public boolean isPossible(String date) {
-		int[] days = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}; //1ì›”~12ì›” ì§ì ‘ ë¹„êµ.
+		int[] days = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}; //1¿ù~12¿ù Á÷Á¢ ºñ±³.
 		int month;
 		if(date.length()<8){
-			System.out.println("ì…ë ¥ê¸¸ì´ê°€ 8ë³´ë‹¤ ì‘ìŠµë‹ˆë‹¤. ë‹¤ì‹œ ì…ë ¥í•´ì£¼ì„¸ìš”.");
+			System.out.println("ÀÔ·Â±æÀÌ°¡ 8º¸´Ù ÀÛ½À´Ï´Ù. ´Ù½Ã ÀÔ·ÂÇØÁÖ¼¼¿ä.");
 			return false;
 		}else if(date.length()>8){
-			System.out.println("ì…ë ¥ê¸¸ì´ê°€ 8ë³´ë‹¤ í½ë‹ˆë‹¤. ë‹¤ì‹œ ì…ë ¥í•´ì£¼ì„¸ìš”.");
+			System.out.println("ÀÔ·Â±æÀÌ°¡ 8º¸´Ù Å®´Ï´Ù. ´Ù½Ã ÀÔ·ÂÇØÁÖ¼¼¿ä.");
 			return false;
 		}
 		else {
@@ -71,53 +65,81 @@ public class Manager {
 			if(possible)
 				return true;
 			else {
-				System.out.println("ì˜ëª»ëœ ì…ë ¥ì…ë‹ˆë‹¤. ë‹¤ì‹œ ì…ë ¥í•´ì£¼ì„¸ìš”.");
+				System.out.println("Àß¸øµÈ ÀÔ·ÂÀÔ´Ï´Ù. ´Ù½Ã ÀÔ·ÂÇØÁÖ¼¼¿ä.");
 				return false;
 			}
 		}
 	}
 	
-	public boolean isPossible(int i, int begin, int end) {
-		if(i>=begin&&i<=end)
-			return true;
-		else {
-			System.out.println("ì˜ëª»ëœ ì…ë ¥ì…ë‹ˆë‹¤. ë‹¤ì‹œ ì…ë ¥í•´ì£¼ì„¸ìš”.");
-			return false;
-		}
-	}
+	
 	
 	public void start(Db db) throws InterruptedException, IOException{
 		boolean con = true;
 		
 		while(con) {
-		System.out.println("1. ê²°ì œí•˜ê¸°");
-		System.out.println("2. í™˜ë¶ˆí•˜ê¸°");
-		System.out.println("3. ì¬ê³ ê´€ë¦¬");
-		System.out.println("4. í˜„ê¸ˆê´€ë¦¬");
-		System.out.println("5. ë§¤ì¶œí™•ì¸");
-		System.out.println("6. ì¢…ë£Œ");
-		System.out.print("\në©”ë‰´ ì„ íƒ: ");
-		int select = scan.nextInt();
-		if(isPossible(select,1,6)) {
-			switch(select) {
-			case 1: //1. ê²°ì œí•˜ê¸°	
+		System.out.println(m_date);
+		System.out.println("1. °áÁ¦ÇÏ±â");
+		System.out.println("2. È¯ºÒÇÏ±â");
+		System.out.println("3. Àç°í°ü¸®");
+		System.out.println("4. Çö±İ°ü¸®");
+		System.out.println("5. ¸ÅÃâÈ®ÀÎ");
+		System.out.println("6. Á¾·á");
+		String select = "";
+		int cnt = 0;
+		do {
+			if(cnt!=0)
+				System.out.println("Àß¸øµÈ ÀÔ·ÂÀÔ´Ï´Ù. ´Ù½Ã ÀÔ·ÂÇØÁÖ¼¼¿ä.");
+			System.out.print("\n¸Ş´º ¼±ÅÃ: ");
+			select = scan.next();
+			cnt++;
+		}
+		while(!select.matches("[1-6]"));
+		{
+			switch(Integer.parseInt(select)) {
+			case 1: //1. °áÁ¦ÇÏ±â	
 				Pay pay = new Pay(db, date);
 				pay.startPay();
 				break;
-			case 2: //2. í™˜ë¶ˆí•˜ê¸°
-			case 3: //3. ì¬ê³ ê´€ë¦¬	
-				InventoryManager im = new InventoryManager();
+			case 2: //2. È¯ºÒÇÏ±â
 				break;
-			case 4: //4. í˜„ê¸ˆê´€ë¦¬
-			case 5: //5. ë§¤ì¶œí™•ì¸	
-			case 6: //6. ì¢…ë£Œ
+			case 3: //3. Àç°í°ü¸®	
+				InventoryManager im = new InventoryManager(db);
+				break;
+			case 4: //4. Çö±İ°ü¸®
+				HashMap<Integer, Integer>cash = db.getCash();
+				String money ="";
+				int count = 0;
+				do {
+					if(count!=0)
+						System.out.println("Àß¸øµÈ ÀÔ·ÂÀÔ´Ï´Ù. ´Ù½Ã ÀÔ·ÂÇØÁÖ¼¼¿ä.");
+					System.out.print("ÃæÀüÇÒ ÁöÆó(µ¿Àü)¸¦ ¼±ÅÃÇØÁÖ¼¼¿ä : ");
+					money = scan.next();
+				}
+				while(!money.matches("[1-8]"));
+					if(db.isPossible(Integer.parseInt(money))) {
+						
+						String insert = "";
+						int num = 0;
+						do {
+							if(insert.length()>=3)
+								System.out.println("±æÀÌ°¡ ³Ê¹« ±é´Ï´Ù. ´Ù½Ã ÀÔ·ÂÇØÁÖ¼¼¿ä. ");
+						else if(num!=0)
+								System.out.println("Àß¸øµÈ ÀÔ·ÂÀÔ´Ï´Ù. ´Ù½Ã ÀÔ·ÂÇØÁÖ¼¼¿ä.");
+							System.out.print("ÃÑ ¸î °³ÀÇ ÁöÆó¸¦ Ãß°¡ÇÏ½Ç °Ç°¡¿ä ? : ");
+							insert=scan.next();
+						}while(!insert.matches("[1-9]{1,2}|[1-9]"));
+						db.setCash(cash.get(db.key[Integer.parseInt(money)-1]), Integer.parseInt(insert), false);
+					}
+				break;
+			case 5: //5. ¸ÅÃâÈ®ÀÎ
+				break;
+			case 6: //6. Á¾·á
 				con = false;
 			}
 		}
 		
 		}
 	}
-	
-	
-	
 }
+	
+	

@@ -12,8 +12,8 @@ public class Db {
 	private HashMap<String, NameInfo> names;//상품종류(상품이름) 저장하는 리스트
 	private HashMap<Integer, Integer> cash;//현금보유량 저장하는 리스트
 	private HashMap<String, ArrayList<Product>> payments = new HashMap<>();//결제 정보 저장 리스트
-	
 	private FileIO fileio;//파일 입출력 클래스
+	int [] key = {10, 50, 100, 500, 1000, 5000, 10000, 50000};//현금 종류.
 	
 	public Db() {
 		fileio = new FileIO();
@@ -86,7 +86,7 @@ public class Db {
 		String key;
 		for(int i=0; i<names.size(); i++) {
 			key = it.next();
-			String str = key + "/" + names.get(key).getName_code() + "/" + names.get(key).getLast_num();
+			String str = key + "/" + names.get(key).getCate_code() + "/" + names.get(key).getLast_num();
 			str += "/" + names.get(key).getEpd_value()+ names.get(key).getPrice() +"\n";
 			contents.add(str);
 		}
@@ -102,10 +102,27 @@ public class Db {
 	public void setCash(int unit, int count, boolean isNegative) {
 		int num = cash.get(unit);
 		cash.remove(unit);
-		if(isNegative)
-			cash.put(unit, num-count);
-		else
+		if(isNegative) {//잔량 감소.
+			if(num-count>0)
+			{	System.out.println(unit+"원 "+count+" 개 감소 완료되었습니다.");
+				cash.put(unit, num-count);
+			}else
+			{
+				System.out.println(unit+"원 지폐 개수가 0개가 되었습니다.");
+				cash.put(unit,0);
+			}
+		}
+		else//잔량 증가.
+			{
+			if(num+count<=99) {
+			System.out.println(unit+"원 "+count+" 개 증가 완료되었습니다.");
 			cash.put(unit, num+count);
+			}
+			else {
+				System.out.println("최대 99개까지만 추가가 가능해 "+unit+"원 지폐는 총 99개가 되었습니다.");
+				cash.put(unit,99);
+			}
+			}
 		ArrayList<String> contents = new ArrayList<>();
 		contents.add("50000:"+cash.get(50000)+"\n");
 		contents.add("10000:"+cash.get(10000)+"\n");
@@ -181,13 +198,34 @@ public class Db {
 		fileio.writeFile("PaymentList.txt", contents);
 	}
 	
+	public boolean isPossible(String date, int i) {
+		if(i==8)//같은 날짜.
+			return true;
+		if(date.charAt(i)>date.charAt(i))//이후 날짜.
+			return true;
+		else if(date.charAt(i)==date.charAt(i))
+			return isPossible(date,i+1);
+		else//이전 날짜.
+			return false;
+	}
+	
+	public boolean isPossible(int i) {
+		if(cash.get(key[i-1])==99) {
+			System.out.println("해당 지폐의 개수가 99개라 더 이상 추가가 불가합니다.");
+			return false;
+		}else 
+			return true;
+	}
+	
+	
 	public String getLast_date() {
 		return last_date;
 	}
 	//최근 날짜 변경 함수
-	public void setLast_date(String last_date) {
+	public String setLast_date(String last_date) {
 		this.last_date = last_date;
 		fileio.writeFile("Date.txt", last_date);
+		return last_date.substring(0,4)+"_"+last_date.substring(4,6)+"_"+last_date.substring(6);
 	}
 
 	public HashMap<String, ArrayList<Product>> getProducts() {
@@ -203,6 +241,9 @@ public class Db {
 	}
 
 	public HashMap<Integer, Integer> getCash() {
+		
+		for(int i=0;i<key.length;i++)
+			System.out.println(key[i]+"원 :"+cash.get(key[i])+" 개");
 		return cash;
 	}
 	
