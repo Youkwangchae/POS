@@ -2,10 +2,7 @@ package sw.pos;
 
 import java.util.Scanner;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.ArrayList;
-import java.util.Set;
-import java.io.*;
 
 public class Refund {
 	private int index;//환불 가능한 상품의 인덱스 번호를 받는 변수
@@ -91,39 +88,8 @@ public class Refund {
 						System.out.println("상품코드 입력으로 넘어갑니다.");
 						continue; //while문으로 넘어가기
 					}else if(YN.equals("Y")) {//해당 결제목록에서 결제한 상품 삭제
-						list.remove(index);//해당 리스트에서 상품정보 삭제
-						File file=new File("PaymentList.txt");//파일 선언
-						FileWriter fw=null;
-						BufferedWriter bw=null;
-						try {
-							fw=new FileWriter(file);
-							bw=new BufferedWriter(fw);
-							bw.write("");
-							Set<String> set=Product_list.keySet();
-							int size=set.size();
-							int count=0;
-							Iterator<String> iterator=set.iterator();
-							while(iterator.hasNext()) {
-								String key=(String)iterator.next();
-								bw.write(key+"\r\n");
-								for(int i=0;i<Product_list.get(key).size();i++) {
-									Product product=Product_list.get(key).get(i);
-									bw.write(product.toString());
-								}
-								count++;
-								if(size>count)//마지막에도 \n을 한다면 한 칸의 잉여공간이 생기기때문에 마지막 결제목록이라면 \n을 빼준다.
-									bw.write("@"+"\n");
-								else
-									bw.write("@");
-							}
-							bw.flush();
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						//밑에 두개는 아직 PaymentList.txt에 없는거 같아서 작성 안함
-						//현금일경우 환불 알고리즘 넣기 부족한경우에는 현금충전 가져오기
-						//카드일경우 카드환불 문구 넣기
+						list.remove(index);
+						date.removePayment(PayCode, product_code);
 						System.out.println("환불이 완료됐습니다");
 					}else {
 						System.out.println("올바르지 않은 입력입니다.");
@@ -199,4 +165,3 @@ public class Refund {
 		return true;
 	}
 }
-
