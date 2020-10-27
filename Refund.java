@@ -15,15 +15,13 @@ public class Refund {
 	private int today_day; //현재 일
 	private Db date;// 현재날짜를 가져오기 위해 선언한 Db객체
 	private HashMap<String,ArrayList<Product>> Product_list; //앞에는 상품코드, 뒤에는 상품코드 포함한 상품 정보들
-	private FileIO fileio; //결제 파일을 읽고 수정하기 위해 선언한 FileIO객체
 	private ArrayList<Product> list;
-	public Refund() {
+	public Refund(Db date) {
 		super();
 		this.scan = new Scanner(System.in);
-		date=new Db();
+		this.date=date;
 		Product_list=new HashMap<String, ArrayList<Product>>();
-		fileio=new FileIO();
-		Product_list=fileio.readPayment();
+		Product_list=date.getPayments();
 	}
 	
 	public void RefundS() { //환불 진행하는 함수
