@@ -11,18 +11,19 @@ public class DisposalRegister {
 	
 	ScreenClear sc = new ScreenClear();
 	Scanner scan = new Scanner(System.in);
-	Db db = new Db();
+	Db db;
 	FileIO fileio = new FileIO();
-	Set<String> set; 														//í‚¤ ê°’ì„ ì €ì¥í•˜ëŠ” set
-	Iterator<String> it; 													//set ê²€ìƒ‰ì„ ìœ„í•œ iterator
-	String key, today;														//Setì—ì„œ ê²€ìƒ‰ì„ ìœ„í•œ ìŠ¤íŠ¸ë§ ë³€ìˆ˜, ì˜¤ëŠ˜ ë‚ ì§œ
-	boolean check;															//ê²€ìƒ‰ ì„±ê³µ ì—¬ë¶€ í™•ì¸
+	Set<String> set; 														//Å° °ªÀ» ÀúÀåÇÏ´Â set
+	Iterator<String> it; 													//set °Ë»öÀ» À§ÇÑ iterator
+	String key, today;														//Set¿¡¼­ °Ë»öÀ» À§ÇÑ ½ºÆ®¸µ º¯¼ö, ¿À´Ã ³¯Â¥
+	boolean check;															//°Ë»ö ¼º°ø ¿©ºÎ È®ÀÎ
 	
-	public DisposalRegister() throws InterruptedException, IOException
+	public DisposalRegister(Db db) throws InterruptedException, IOException
 	{
+		this.db = db;
 		today = db.getLast_date();
 		ShowDisposal(today);
-		System.out.println("ì¬ê³  ê´€ë¦¬ë¡œ ëŒì•„ê°‘ë‹ˆë‹¤.");
+		System.out.println("Àç°í °ü¸®·Î µ¹¾Æ°©´Ï´Ù.");
 	}
 	
 	public void ShowDisposal(String today) throws InterruptedException, IOException
@@ -35,15 +36,15 @@ public class DisposalRegister {
 		do
 		{
 			sc.ScreenClear();
-			System.out.println("- ìœ í†µê¸°í•œ ì§€ë‚œ ìƒí’ˆê²€ìƒ‰ -");
-			for(int i=0; i < Category.size() ; i++)					//í° ì¹´í…Œê³ ë¦¬ ê°œìˆ˜ ë§Œí¼ì˜ ìƒí’ˆ íŒŒì¼ì„ ì½ê³  ìœ í†µê¸°í•œ ì§€ë‚œ ìƒí’ˆ ì¶œë ¥
+			System.out.println("- À¯Åë±âÇÑ Áö³­ »óÇ°°Ë»ö -");
+			for(int i=0; i < Category.size() ; i++)					//Å« Ä«Å×°í¸® °³¼ö ¸¸Å­ÀÇ »óÇ° ÆÄÀÏÀ» ÀĞ°í À¯Åë±âÇÑ Áö³­ »óÇ° Ãâ·Â
 			{
 				filename = String.valueOf((char) ('A' + i/26) + String.valueOf((char) ('A' + i%26))) + ".txt";
 				products = fileio.readProduct(filename);
 				
 				for(int j = 0; j<products.size(); j++)
 				{
-					if(Integer.parseInt(products.get(j).getEpdate()) < Integer.parseInt(today))		//ìœ í†µê¸°í•œ < ì˜¤ëŠ˜ ë‚ ì§œ
+					if(Integer.parseInt(products.get(j).getEpdate()) < Integer.parseInt(today))		//À¯Åë±âÇÑ < ¿À´Ã ³¯Â¥
 					{
 						check = true;
 						System.out.println(products.get(j).getCode() + "/" + products.get(j).getName() + "/" + products.get(j).getEpdate() + "/" + products.get(j).getPrice());
@@ -54,31 +55,31 @@ public class DisposalRegister {
 			}
 			
 			 if(!check)
-				 System.out.println("\nìœ í†µê¸°í•œ ì§€ë‚œ ìƒí’ˆë“¤ì´ ì—†ìŠµë‹ˆë‹¤..");
+				 System.out.println("\nÀ¯Åë±âÇÑ Áö³­ »óÇ°µéÀÌ ¾ø½À´Ï´Ù..");
 			 else
 			 {
 				 System.out.println("\n\n\n");
-				 System.out.println("íê¸°í•  ìƒí’ˆì˜ ìƒí’ˆì½”ë“œë¥¼ ì…ë ¥í•´ì£¼ì„¸ìš”");
-				 System.out.println("ì¢…ë£Œí•˜ì‹œë ¤ë©´ \"ì™„ë£Œ\"ë¥¼ ì…ë ¥í•˜ì„¸ìš”");
+				 System.out.println("Æó±âÇÒ »óÇ°ÀÇ »óÇ°ÄÚµå¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä");
+				 System.out.println("Á¾·áÇÏ½Ã·Á¸é \"¿Ï·á\"¸¦ ÀÔ·ÂÇÏ¼¼¿ä");
 				 
 				
 			 }
 			 
 			 answer = scan.next();
 			 
-			 if(!answer.equals("ì™„ë£Œ"))		//ì™„ë£Œê°€ ì•„ë‹ˆë©´
+			 if(!answer.equals("¿Ï·á"))		//¿Ï·á°¡ ¾Æ´Ï¸é
 			 {
-				 while( (!answer.matches(".*[A-Z]+.*")) || answer.length() != 6 )	//ì¶”ê°€ ê°œìˆ˜ ì˜ˆì™¸ì²˜ë¦¬
+				 while( (!answer.matches(".*[A-Z]+.*")) || answer.length() != 6 )	//Ãß°¡ °³¼ö ¿¹¿ÜÃ³¸®
 				 {
-					 System.out.print("ì˜ëª»ëœ ì…ë ¥, ë‹¤ì‹œ ì…ë ¥í•´ì£¼ì„¸ìš”(ONLY ë¡œë§ˆì ëŒ€ë¬¸ì, 6ê¸€ì): ");
+					 System.out.print("Àß¸øµÈ ÀÔ·Â, ´Ù½Ã ÀÔ·ÂÇØÁÖ¼¼¿ä(ONLY ·Î¸¶ÀÚ ´ë¹®ÀÚ, 6±ÛÀÚ): ");
 					 answer = scan.next();
-					 if(answer.equals("ì™„ë£Œ"))		
+					 if(answer.equals("¿Ï·á"))		
 						 break;
 				 }
-				 if(!answer.equals("ì™„ë£Œ"))		//ì™„ë£Œê°€ ì•„ë‹ˆë©´
+				 if(!answer.equals("¿Ï·á"))		//¿Ï·á°¡ ¾Æ´Ï¸é
 					 CheckDisposal(answer);
 			 }
-		}while(!answer.equals("ì™„ë£Œ"));
+		}while(!answer.equals("¿Ï·á"));
 	
 	}
 	
@@ -88,12 +89,12 @@ public class DisposalRegister {
 		 ArrayList<String> contents = new ArrayList();
 		 String filename, yn;
 			
-		 System.out.print("í•´ë‹¹ ìƒí’ˆ(" + procode + ")ì„ ì •ë§ íê¸°í•˜ì‹œê² ìŠµë‹ˆê¹Œ?(Y/N) ");
+		 System.out.print("ÇØ´ç »óÇ°(" + procode + ")À» Á¤¸» Æó±âÇÏ½Ã°Ú½À´Ï±î?(Y/N) ");
 		 yn = scan.next();
 		 
 		 while(!( yn.equals("Y") || yn.equals("N") ))
 		 {
-			 System.out.print("ì˜ëª»ëœ ì…ë ¥, ë‹¤ì‹œ ì…ë ¥í•´ì£¼ì„¸ìš”(ONLY ë¡œë§ˆì ëŒ€ë¬¸ì, 6ê¸€ì): ");
+			 System.out.print("Àß¸øµÈ ÀÔ·Â, ´Ù½Ã ÀÔ·ÂÇØÁÖ¼¼¿ä(ONLY ·Î¸¶ÀÚ ´ë¹®ÀÚ, 6±ÛÀÚ): ");
 			 procode = scan.next();
 		 }
 		 
@@ -101,7 +102,7 @@ public class DisposalRegister {
 			 return;
 		 else if(yn.equals("Y"))
 		 {
-			 filename = procode.substring(0, 2) + ".txt";		//í° ì¹´í…Œê³ ë¦¬ ì¶”ì¶œ
+			 filename = procode.substring(0, 2) + ".txt";		//Å« Ä«Å×°í¸® ÃßÃâ
 			 products = fileio.readProduct(filename);
 			 int ps = products.size();
 			 

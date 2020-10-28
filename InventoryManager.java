@@ -7,39 +7,45 @@ public class InventoryManager {
 	
 	Scanner scan = new Scanner(System.in);
 	ScreenClear sc = new ScreenClear();
-	int menu;
-	public InventoryManager() throws InterruptedException, IOException	//ìƒì„±ì
+	String menu;
+	public InventoryManager(Db db) throws InterruptedException, IOException	//»ı¼ºÀÚ
 	{
 		do
 		{	
-			System.out.println("1. ìƒí’ˆë“±ë¡");
-			System.out.println("2. ì¬ê³ ì¶”ê°€");
-			System.out.println("3. íê¸°ë“±ë¡");
-			System.out.println("4. ì¢…ë£Œ\n");
-			System.out.print("ë©”ë‰´ ì„ íƒ: ");
-			menu = scan.nextInt();
+			System.out.println("1. »óÇ°µî·Ï");
+			System.out.println("2. Àç°íÃß°¡");
+			System.out.println("3. Æó±âµî·Ï");
+			System.out.println("4. Á¾·á\n");
+			System.out.print("¸Ş´º ¼±ÅÃ: ");
+			menu = scan.next();
 			
-			switch(menu)	//ì…ë ¥ë°›ì€ ëª…ë ¹ì–´ì— ë”°ë¥¸ ë™ì‘
+			while( (!menu.matches(".*[0-9]+.*")) || (menu.length() > 1) )	//¸í·É¾î ¿¹¿ÜÃ³¸®
 			{
-			case 1:			//1. ìƒí’ˆë“±ë¡
-				sc.ScreenClear();
-				ProductRegister pr = new ProductRegister();
-				break;
-			case 2:			//2. ì¬ê³ ì¶”ê°€
-				sc.ScreenClear();
-				AddInventory ai = new AddInventory();
-				break;
-			case 3:			//3. íê¸°ë“±ë¡
-				sc.ScreenClear();
-				DisposalRegister dr = new DisposalRegister();
-				break;
-			case 4:			//4. ì¢…ë£Œ
-				System.out.println("ì¬ê³ ê´€ë¦¬ì„ ì¢…ë£Œí•©ë‹ˆë‹¤.");
-				break;		
-			default:		//ì˜ëª»ëœ ëª…ë ¹ì–´ì¸  ê²½ìš°
-				System.out.println("ëª…ë ¹ì–´ê°€ ì˜³ì§€ ì•ŠìŠµë‹ˆë‹¤.\n");
+				System.out.print("Àß¸øµÈ ÀÔ·Â, ´Ù½Ã ÀÔ·ÂÇØÁÖ¼¼¿ä(ONLY ¼ıÀÚ, 1±ÛÀÚ): ");
+				menu = scan.next();
 			}
-		}while(menu != 4);
+			
+			switch(menu)	//ÀÔ·Â¹ŞÀº ¸í·É¾î¿¡ µû¸¥ µ¿ÀÛ
+			{
+			case "1":			//1. »óÇ°µî·Ï
+				sc.ScreenClear();
+				ProductRegister pr = new ProductRegister(db);
+				break;
+			case "2":			//2. Àç°íÃß°¡
+				sc.ScreenClear();
+				AddInventory ai = new AddInventory(db);
+				break;
+			case "3":			//3. Æó±âµî·Ï
+				sc.ScreenClear();
+				DisposalRegister dr = new DisposalRegister(db);
+				break;
+			case "4":			//4. Á¾·á
+				System.out.println("Àç°í°ü¸®À» Á¾·áÇÕ´Ï´Ù.");
+				break;		
+			default:		//Àß¸øµÈ ¸í·É¾îÀÎ  °æ¿ì
+				System.out.println("¸í·É¾î°¡ ¿ÇÁö ¾Ê½À´Ï´Ù.\n");
+			}
+		}while(menu != "4");
 	}
 	
 }

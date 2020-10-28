@@ -11,8 +11,9 @@ import java.util.Scanner;
 import java.util.StringTokenizer;
 
 public class FileIO {
+	
 	public FileIO() {
-
+		
 	}
 	//날짜 저장한 txt 파일 읽기
 	public String readLastDate() {
@@ -76,7 +77,7 @@ public class FileIO {
 				String str = scan.nextLine();
 				StringTokenizer token = new StringTokenizer(str, "/");
 				String name = token.nextToken();
-				NameInfo info = new NameInfo(token.nextToken(), Integer.parseInt(token.nextToken()), Integer.parseInt(token.nextToken()));
+				NameInfo info = new NameInfo(token.nextToken(), Integer.parseInt(token.nextToken()), Integer.parseInt(token.nextToken()), Integer.parseInt(token.nextToken()));
 				names.put(name, info);
 			}
 			scan.close();

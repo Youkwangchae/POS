@@ -1,4 +1,4 @@
-	package sw.pos;
+package sw.pos;
 	
 	import java.util.ArrayList;
 	import java.util.HashMap;
@@ -32,14 +32,14 @@
 			
 			while(true) {
 				printProducts();
-				System.out.print("ìƒí’ˆì½”ë“œë¥¼ ì…ë ¥í•´ì£¼ì„¸ìš”(ë§ˆì¹˜ë ¤ë©´ ì™„ë£Œ):");
+				System.out.print("»óÇ°ÄÚµå¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä(¸¶Ä¡·Á¸é ¿Ï·á):");
 				answer = sc.next();
-				if(answer.equals("ì™„ë£Œ")) {
+				if(answer.equals("¿Ï·á")) {
 					break;
 				}
 				
 				if(answer.length() != 6) {
-					System.out.println("ìƒí’ˆì½”ë“œì˜ ê¸¸ì´ëŠ” 6ì´ì–´ì•¼ í•©ë‹ˆë‹¤.");
+					System.out.println("»óÇ°ÄÚµåÀÇ ±æÀÌ´Â 6ÀÌ¾î¾ß ÇÕ´Ï´Ù.");
 					continue;
 				}
 				int check = 0;
@@ -48,13 +48,13 @@
 						check++;
 				}
 				if(check != 6) {
-					System.out.println("ìƒí’ˆì½”ë“œëŠ” ì˜ì–´ë¡œ ì´ë£¨ì–´ì ¸ìˆì–´ì•¼ í•©ë‹ˆë‹¤.");
+					System.out.println("»óÇ°ÄÚµå´Â ¿µ¾î·Î ÀÌ·ç¾îÁ®ÀÖ¾î¾ß ÇÕ´Ï´Ù.");
 					continue;
 				}
 				answer = answer.toUpperCase();
 				
-				//ê¸¸ì´íŒë³„
-				//ì˜ì–´ë¡œë§Œ ì í˜€ìˆëŠ” ì½”ë“œì¸ì§€ íŒë³„
+				//±æÀÌÆÇº°
+				//¿µ¾î·Î¸¸ ÀûÇôÀÖ´Â ÄÚµåÀÎÁö ÆÇº°
 					
 				if(isExistProduct(answer)) {
 					boolean exist = false;
@@ -63,21 +63,21 @@
 						if(this.products.get(file_name).get(i).getCode().indexOf(answer.substring(0, 4)) == 0) {
 							
 							if(this.products.get(file_name).get(i).getCode().equals(answer)&&this.isEdatePassed(this.products.get(file_name).get(i).getEpdate())) {
-								System.out.println("ìœ í†µê¸°í•œì´ ì§€ë‚œ ìƒí’ˆì…ë‹ˆë‹¤.");
+								System.out.println("À¯Åë±âÇÑÀÌ Áö³­ »óÇ°ÀÔ´Ï´Ù.");
 								exist = true;
 								break;
 							}
 							
 							for(int j = 0; j < products_payment.size(); j++) {
 								if(this.products_payment.get(j).getCode().equals(answer)) {
-									System.out.println("ì´ë¯¸ ì¡´ì¬í•˜ëŠ” ìƒí’ˆì…ë‹ˆë‹¤.");
+									System.out.println("ÀÌ¹Ì Á¸ÀçÇÏ´Â »óÇ°ÀÔ´Ï´Ù.");
 									exist = true;
 									break;
 								}
 								
 							}
 							if(!exist) {
-								System.out.println("ìƒí’ˆì´ ì¶”ê°€ë˜ì—ˆìŠµë‹ˆë‹¤.");
+								System.out.println("»óÇ°ÀÌ Ãß°¡µÇ¾ú½À´Ï´Ù.");
 								products_payment.add(this.products.get(file_name).get(i));
 								break;
 							}						
@@ -87,7 +87,7 @@
 						continue;
 				}
 				else {
-					System.out.println("ì˜ëª»ëœ ì…ë ¥ì…ë‹ˆë‹¤. ë‹¤ì‹œ ì…ë ¥í•´ì£¼ì„¸ìš”.");
+					System.out.println("Àß¸øµÈ ÀÔ·ÂÀÔ´Ï´Ù. ´Ù½Ã ÀÔ·ÂÇØÁÖ¼¼¿ä.");
 					continue;
 				}
 	
@@ -95,11 +95,11 @@
 			choose();
 		}
 		
-		public void choose() { //ê²°ì œìˆ˜ë‹¨ì„ íƒ
+		public void choose() { //°áÁ¦¼ö´Ü¼±ÅÃ
 			int answer;
 			while(true) {
 				try {
-					System.out.print("ê²°ì œìˆ˜ë‹¨ì„ ì„ íƒí•´ì£¼ì„¸ìš”(1.í˜„ê¸ˆ, 2.ì¹´ë“œ)");
+					System.out.print("°áÁ¦¼ö´ÜÀ» ¼±ÅÃÇØÁÖ¼¼¿ä(1.Çö±İ, 2.Ä«µå)");
 					answer = sc.nextInt();
 					if(answer == 1) {
 						purchase(1);
@@ -110,28 +110,28 @@
 						break;
 					}
 					else {
-						System.out.println("ì˜ëª»ëœ ì…ë ¥ì…ë‹ˆë‹¤. ë‹¤ì‹œ ì…ë ¥í•´ì£¼ì„¸ìš”.");
+						System.out.println("Àß¸øµÈ ÀÔ·ÂÀÔ´Ï´Ù. ´Ù½Ã ÀÔ·ÂÇØÁÖ¼¼¿ä.");
 					}
 				}
 				
 				catch(InputMismatchException E) {
-					System.out.println("ì •ìˆ˜ë§Œ ì…ë ¥í•´ì£¼ì„¸ìš”.");
+					System.out.println("Á¤¼ö¸¸ ÀÔ·ÂÇØÁÖ¼¼¿ä.");
 					sc.next();
 					continue;
 				}
 			}
 		}
 		
-		public void purchase(int type) { //ê²°ì œí• ì§€ ë¬»ê¸°
+		public void purchase(int type) { //°áÁ¦ÇÒÁö ¹¯±â
 			String answer = "";
 			while(true) {
 				printProducts();
-				System.out.print("ê²°ì œ ìˆ˜ë‹¨ : ");
+				System.out.print("°áÁ¦ ¼ö´Ü : ");
 				if(type == 1)
-					System.out.println("í˜„ê¸ˆ");
+					System.out.println("Çö±İ");
 				else
-					System.out.println("ì¹´ë“œ");
-				System.out.print("ê²°ì œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?(Y/N)");
+					System.out.println("Ä«µå");
+				System.out.print("°áÁ¦ÇÏ½Ã°Ú½À´Ï±î?(Y/N)");
 				answer = sc.next();
 				
 				if(answer.equals("Y")) {
@@ -141,7 +141,7 @@
 					}
 					else {
 						successPay();
-						System.out.println("ì¹´ë“œ ê²°ì œê°€ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.");
+						System.out.println("Ä«µå °áÁ¦°¡ ¿Ï·áµÇ¾ú½À´Ï´Ù.");
 						break;
 					}
 				}
@@ -150,14 +150,14 @@
 					return;
 				}
 				else {
-					System.out.println("ì˜ëª»ëœ ì…ë ¥ì…ë‹ˆë‹¤. ë‹¤ì‹œ ì…ë ¥í•´ì£¼ì„¸ìš”.");
+					System.out.println("Àß¸øµÈ ÀÔ·ÂÀÔ´Ï´Ù. ´Ù½Ã ÀÔ·ÂÇØÁÖ¼¼¿ä.");
 				}
 				
 			}
 		}
 		
-		public void sendMoney() { //ê¸ˆì•¡ì…ë ¥
-			//5ë§Œì›, ë§Œì›, ì˜¤ì²œì›, ì²œì›, ì˜¤ë°±ì›, ë°±ì›, ì˜¤ì‹­ì›, ì‹­ì›
+		public void sendMoney() { //±İ¾×ÀÔ·Â
+			//5¸¸¿ø, ¸¸¿ø, ¿ÀÃµ¿ø, Ãµ¿ø, ¿À¹é¿ø, ¹é¿ø, ¿À½Ê¿ø, ½Ê¿ø
 			int answer = 0;
 			int[] money_type = {50000, 10000, 5000, 1000, 500, 100, 50, 10};
 			HashMap<Integer, Integer> charge = new HashMap<>();
@@ -171,15 +171,15 @@
 			charge.put(10, 0);
 			while(true) {
 				try {
-					System.out.print("ë°›ì€ ê¸ˆì•¡ì„ ì…ë ¥í•´ì£¼ì„¸ìš” : ");
+					System.out.print("¹ŞÀº ±İ¾×À» ÀÔ·ÂÇØÁÖ¼¼¿ä : ");
 					answer = sc.nextInt();
 					if(answer < 0) {
-						System.out.println("ì˜ëª»ëœ ì…ë ¥ì…ë‹ˆë‹¤. ë‹¤ì‹œ ì…ë ¥í•´ì£¼ì„¸ìš”.");
+						System.out.println("Àß¸øµÈ ÀÔ·ÂÀÔ´Ï´Ù. ´Ù½Ã ÀÔ·ÂÇØÁÖ¼¼¿ä.");
 						continue;
 					}
 					int total = getTotalPay();
 					if(answer < total) {
-						System.out.println("ë°›ì€ ê¸ˆì•¡ì´ ë¶€ì¡±í•©ë‹ˆë‹¤. ë‹¤ì‹œ ì…ë ¥í•´ì£¼ì„¸ìš”.");
+						System.out.println("¹ŞÀº ±İ¾×ÀÌ ºÎÁ·ÇÕ´Ï´Ù. ´Ù½Ã ÀÔ·ÂÇØÁÖ¼¼¿ä.");
 						continue;
 					}
 					
@@ -203,7 +203,7 @@
 						}
 					}
 					if(flag) {
-						System.out.println("í˜„ê¸ˆ ê²°ì œê°€ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.");
+						System.out.println("Çö±İ °áÁ¦°¡ ¿Ï·áµÇ¾ú½À´Ï´Ù.");
 						successPay();
 						for(int j = 0; j < money_type.length; j++) {
 							int m = money_type[j];
@@ -212,7 +212,7 @@
 						break;
 					}
 					else {
-						System.out.println("í˜„ê¸ˆì´ ë¶€ì¡±í•©ë‹ˆë‹¤.");	//í˜„ê¸ˆì¶©ì „ í”„ë¡¬í”„íŠ¸ë¡œ ë„˜ì–´ê°€ê¸°(ì•„ì§ ë¯¸ì™„)
+						System.out.println("Çö±İÀÌ ºÎÁ·ÇÕ´Ï´Ù.");	//Çö±İÃæÀü ÇÁ·ÒÇÁÆ®·Î ³Ñ¾î°¡±â(¾ÆÁ÷ ¹Ì¿Ï)
 						
 					}
 					
@@ -220,7 +220,7 @@
 					
 				}
 				catch(InputMismatchException E) {
-					System.out.println("ì˜ëª»ëœ ì…ë ¥ì…ë‹ˆë‹¤. ë‹¤ì‹œ ì…ë ¥í•´ì£¼ì„¸ìš”.");
+					System.out.println("Àß¸øµÈ ÀÔ·ÂÀÔ´Ï´Ù. ´Ù½Ã ÀÔ·ÂÇØÁÖ¼¼¿ä.");
 					sc.next();
 					continue;
 				}
@@ -304,20 +304,20 @@
 			Set<String> keys = names.keySet();
 			
 			Iterator<String> it = keys.iterator();
-			System.out.println("==========ìƒí’ˆëª©ë¡==========");
+			System.out.println("==========»óÇ°¸ñ·Ï==========");
 			while(it.hasNext()) {
 				String key = it.next();
-				System.out.print("ìƒí’ˆëª… : " + key + "/" + names.get(key) + "ê°œ/");
+				System.out.print("»óÇ°¸í : " + key + "/" + names.get(key) + "°³/");
 				for(int i = 0; i < this.products_payment.size(); i++) {
 					if(products_payment.get(i).getName().equals(key)) {
-						System.out.println(products_payment.get(i).getPrice()*names.get(key)+"ì›");
+						System.out.println(products_payment.get(i).getPrice()*names.get(key)+"¿ø");
 						total += products_payment.get(i).getPrice()*names.get(key);
 						break;
 					}
 				}
 			}
 			System.out.println("==========================");
-			System.out.println("ì´ ì§€ë¶ˆí•  ê¸ˆì•¡ : " + total + "ì›");
+			System.out.println("ÃÑ ÁöºÒÇÒ ±İ¾× : " + total + "¿ø");
 			
 		}
 		
@@ -337,7 +337,7 @@
 			
 			while(it.hasNext()) {
 				String key = it.next();
-				System.out.print("ìƒí’ˆëª… : " + key + "/" + names.get(key) + "ê°œ/");
+				System.out.print("»óÇ°¸í : " + key + "/" + names.get(key) + "°³/");
 				for(int i = 0; i < this.products_payment.size(); i++) {
 					if(products_payment.get(i).getName().equals(key)) {
 						
