@@ -18,20 +18,22 @@ public class Db {
 	public Db() {
 		fileio = new FileIO();
 		//리스트들 파일내용 저장
-		last_date = fileio.readLastDate();//최신 날짜.
+		last_date = fileio.readLastDate();
 		categorys = fileio.readCategory();
 		names = fileio.readName();
 		cash = fileio.readCash();
 		payments = fileio.readPayment();
-		for(int i=0; i<categorys.size(); i++) {//AA를 하나씩 증가시킴
-			int num1 = (i/26)+65;
-			int num2 = (i%26)+65;
-			char ascii1 = (char)num1;
-			char ascii2 = (char)num2;
-			String file_name = "";
-			file_name+=ascii1;
-			file_name+=ascii2;
-			products.put(file_name, fileio.readProduct((file_name+".txt")));
+		Set<String> set = categorys.keySet();
+		Iterator<String> it = set.iterator();
+		for(int i=0; i<categorys.size(); i++) {
+			String key = it.next();
+			String file_name = categorys.get(key).getCategory_code();
+			if(categorys.get(key).getLast_num()==0) {
+				products.put(file_name, new ArrayList<Product>());
+			}
+			else {
+				products.put(file_name, fileio.readProduct((file_name+".txt")));
+			}
 		}
 	}
 	//상품 추가 함수
@@ -85,43 +87,25 @@ public class Db {
 		for(int i=0; i<names.size(); i++) {
 			key = it.next();
 			String str = key + "/" + names.get(key).getName_code() + "/" + names.get(key).getLast_num();
-			str += "/" + names.get(key).getEpd_value()+"\n";
+			str += "/" + names.get(key).getEpd_value()+ "/" + names.get(key).getPrice() +"\n";
 			contents.add(str);
 		}
 		fileio.writeFile("PName.txt", contents);
 	}
 	//상품종류(상품이름) 추가 함수
-	public void addNames(String name, String code, int epd_value) {
-		names.put(name, new NameInfo(code, 1, epd_value));
-		String contents = name+"/"+code+"/1/"+epd_value;
+	public void addNames(String name, String code, int epd_value, int price) {
+		names.put(name, new NameInfo(code, 0, epd_value, price));
+		String contents = name+"/"+code+"/0/"+epd_value+"/"+price;
 		fileio.writeFile("PName.txt", contents);
 	}
 	//현금 잔량 변경 함수 
 	public void setCash(int unit, int count, boolean isNegative) {
-		
 		int num = cash.get(unit);
 		cash.remove(unit);
-		if(isNegative)//현금 잔량 감소
-		{	if(num-count>0) {
-			System.out.println(unit+"원 "+count+"개 감소 완료!");
-				cash.put(unit, num-count);
-		}
-			else {
-				System.out.println("해당 지폐의 개수가 0개가 되었습니다.");
-				cash.put(unit,0);
-			}
-		}
+		if(isNegative)
+			cash.put(unit, num-count);
 		else
-		{	if(num+count<=99)//현금 잔량 증가
-			{System.out.println(unit+"원 "+count+"개 증가 완료!");
 			cash.put(unit, num+count);
-			}
-			else {
-				System.out.println("한 지폐당 최대 99개까지만 보유할 수 있어 99개로 추가되었습니다.");
-				cash.put(unit,99);
-			}
-		}
-		
 		ArrayList<String> contents = new ArrayList<>();
 		contents.add("50000:"+cash.get(50000)+"\n");
 		contents.add("10000:"+cash.get(10000)+"\n");
@@ -132,7 +116,6 @@ public class Db {
 		contents.add("50:"+cash.get(50)+"\n");
 		contents.add("10:"+cash.get(10)+"\n");
 		fileio.writeFile("Cash.txt", contents);
-		
 	}
 	//큰 카테고리 변경 함수
 	public void addCategory(String cate) {
@@ -150,8 +133,8 @@ public class Db {
 	}
 	//큰 카테고리 추가 함수
 	public void addCategory(String cate, String code) {
-		categorys.put(cate, new CategoryInfo(code, 1));
-		String contents = cate+"/"+code+"/1";
+		categorys.put(cate, new CategoryInfo(code, 0));
+		String contents = cate+"/"+code+"/0";
 		fileio.writeFile("Category.txt", contents);
 	}
 	//결제 기록 추가 함수
@@ -162,7 +145,13 @@ public class Db {
 			str+= list.get(i).getCode();
 			str+="/"+list.get(i).getName();
 			str+="/"+list.get(i).getEpdate();
-			str+="/"+list.get(i).getPrice()+"\n";
+			str+="/"+list.get(i).getPrice();
+			if(list.get(i).getIsPayByCash()==true) {
+				str+="/1\n";
+			}
+			else {
+				str+="/0\n";
+			}
 		}
 		str+="@\n";
 		fileio.writeFile("PaymentList.txt", str);
@@ -197,45 +186,14 @@ public class Db {
 		}
 		fileio.writeFile("PaymentList.txt", contents);
 	}
-	//현재 날짜보다 이전 날짜인지 판단.
+	
 	public String getLast_date() {
 		return last_date;
 	}
-	
-	public boolean isPossible(String date) {
-		boolean isLast_date = false;
-		//날짜는 무조건 20000101~20991231니까 index 2부터 index 7까지 보면 됨.
-		
-		if(isPossible(date, 2)) {
-			isLast_date = true;
-		}
-		
-		if(isLast_date) 
-			return true;
-		else {
-			System.out.println("기존에 입력한 날짜와 같거나 이후의 날짜만 입력 가능합니다.");
-			System.out.println("다시 입력해주세요.");
-			return false;
-		}
-		
-	}
-	
-	public boolean isPossible(String date, int i) {
-		if(i==8)
-			return true;
-		if(date.charAt(i)-'0' > last_date.charAt(i)-'0')
-			return true;
-		else if(date.charAt(i)-'0'== last_date.charAt(i)-'0')
-			return isPossible(date, i+1);
-		else
-			return false;
-	}
-	
 	//최근 날짜 변경 함수
-	public String setLast_date(String last_date) {
-			this.last_date = last_date;
-			fileio.writeFile("Date.txt", last_date);
-			return last_date.substring(0, 4)+"_"+last_date.substring(4, 6)+"_"+last_date.substring(6);
+	public void setLast_date(String last_date) {
+		this.last_date = last_date;
+		fileio.writeFile("Date.txt", last_date);
 	}
 
 	public HashMap<String, ArrayList<Product>> getProducts() {
@@ -250,17 +208,10 @@ public class Db {
 		return names;
 	}
 
+	public HashMap<Integer, Integer> getCash() {
+		return cash;
+	}
 	public HashMap<String, ArrayList<Product>> getPayments() {
 		return payments;
 	}
-	public void setPayments(HashMap<String, ArrayList<Product>> payments) {
-		this.payments = payments;
-	}
-	public HashMap<Integer, Integer> getCash() {
-		int [] key = {10, 50, 100, 500, 1000, 5000, 10000, 50000};
-		for(int i=0;i<cash.size();i++)
-			System.out.println((i+1)+"."+key[i]+"원: "+cash.get(key[i])+"개");
-		return cash;
-	}
-	
 }
