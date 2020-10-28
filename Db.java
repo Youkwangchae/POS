@@ -212,4 +212,8 @@ public class Db {
 		return cash;
 	}
 	
+	public HashMap<String, ArrayList<Product>> getPayments() {
+		return payments;
+	}
+	
 }
