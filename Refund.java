@@ -16,12 +16,16 @@ public class Refund {
 	private Db date;// 현재날짜를 가져오기 위해 선언한 Db객체
 	private HashMap<String,ArrayList<Product>> Product_list; //앞에는 상품코드, 뒤에는 상품코드 포함한 상품 정보들
 	private ArrayList<Product> list;
+	private CashManager cm;
+	String isCashCharge; //현금충전 여부 체크하기 위한 변수
+	
 	public Refund(Db date) {
-		super();
 		this.scan = new Scanner(System.in);
 		this.date=date;
 		Product_list=new HashMap<String, ArrayList<Product>>();
 		Product_list=date.getPayments();
+		cm=new CashManager(date);
+		this.isCashCharge="N";
 	}
 	
 	public void RefundS() { //환불 진행하는 함수
@@ -42,7 +46,6 @@ public class Refund {
 		today_day=Integer.parseInt(today.substring(6,8));//현재날짜 일
 
 		int day_term1=checkD(year1,month1,day1);//구매날짜와 현재 날짜 차이 계산
-		System.out.println(day_term1);
 		if(day_term1>=7) {//여기서 현재 날짜와 구매날짜 비교 7일 넘을시 환불 불가 판정후 메인메뉴로 복귀
 			System.out.println("구입 후 일주일이 지났기 때문에 환불이 불가능합니다. 프로그램을 종료합니다");
 			return; //종료분기
@@ -86,11 +89,45 @@ public class Refund {
 						System.out.println("상품코드 입력으로 넘어갑니다.");
 						continue; //while문으로 넘어가기
 					}else if(YN.equals("Y")) {//해당 결제목록에서 결제한 상품 삭제
-						list.remove(index);
-						date.removePayment(PayCode, product_code);
-						System.out.println("환불이 완료됐습니다");
+						int P_price=list.get(index).getPrice();//상품 가격 가져오기
+						if(list.get(index).getIsPayByCash()) {//현금 결제인 경우
+							System.out.println(P_price+"원의 현금 환불을 진행합니다.\n......\n");
+							for(int i=7;i>=0;i--) {
+								int mok=P_price/cm.getKeyindex(i);
+								if(mok==0)
+									continue;
+								else {
+									P_price-=cm.getKeyindex(i)*mok;
+									if(date.getCash().get(cm.getKeyindex(i))<mok) {
+										System.out.print("잔돈이 부족합니다."+cm.getKeyindex(i)+"원이 "+(mok-date.getCash().get(cm.getKeyindex(i)))+"개 더 필요합니다. 현금 충전을 진행하시겠습니까? : ");
+										String a=scan.next();
+										setIsCashCharge(a);
+										if(isCashCharge.equals("Y")) {
+											cm.ManageCash();
+										}else if(isCashCharge.equals("N")) {
+											System.out.println("상품 코드 입력 부분으로 넘어갑니다.");
+											break;
+										}else {
+											System.out.println("올바르지 않은 입력입니다.");
+										}
+									}
+									else {
+										setIsCashCharge("Y");
+										date.setCash(cm.getKeyindex(i), mok, true);
+									}
+								}
+									
+							}
+						}
+						else //카드 결제인 경우
+							System.out.println(P_price+"원의 카드 환불을 진행합니다\n....\n");
+						if(isCashCharge.equals("Y")&&YN.equals("Y")&&(P_price==0)) {
+							list.remove(index);
+							date.removePayment(PayCode, product_code);
+							System.out.println("환불이 완료됐습니다");
+						}
 					}else {
-						System.out.println("올바르지 않은 입력입니다.");
+						System.out.println("잘못된 입력입니다.");
 					}
 				}
 			}else if(product_code.equals("완료")) {
@@ -103,6 +140,10 @@ public class Refund {
 		}
 	}
 	
+	public void setIsCashCharge(String isCashCharge) {
+		this.isCashCharge = isCashCharge;
+	}
+
 	public int checkD(int year, int month, int day) {//날짜 차이 계산하는 함수
 		int day_term=(today_year-year)*365;//현재 날짜와 입력받은 년도 계산
 		for(int i=1;i<=today_month;i++) { //현재 날짜까지 일 수 더하기
