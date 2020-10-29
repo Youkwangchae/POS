@@ -57,7 +57,11 @@ public class CashManager {
 				String ans = "";
 				ans = scan.nextLine();
 				while(!ans.matches("Y|N")) {
-					System.out.println("잘못된 입력입니다. Y 또는 N만 입력해주세요.");
+					if(ans.length()>1)
+						System.out.println("길이가 너무 깁니다. Y 또는 N만 입력해주세요.");
+					else
+						System.out.println("잘못된 입력입니다. Y 또는 N만 입력해주세요.");
+					ans = scan.nextLine();
 				}
 				if(ans.equals("Y"))
 					setCash(key[Integer.parseInt(money)-1], Integer.parseInt(insert), false);
