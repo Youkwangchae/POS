@@ -57,10 +57,9 @@ public class DisposalRegister {
 			 else
 			 {
 				 System.out.println("\n\n\n");
-				 System.out.println("폐기할 상품의 상품코드를 입력해주세요");
-				 System.out.println("종료하시려면 \"완료\"를 입력하세요");		
+				 System.out.println("폐기할 상품의 상품코드를 입력해주세요");	
 			 }
-			 
+			 System.out.println("종료하시려면 \"완료\"를 입력하세요");	
 			 answer = scan.nextLine();
 			 
 			 if(!answer.equals("완료"))		//완료가 아니면
