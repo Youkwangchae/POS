@@ -28,7 +28,7 @@ public class AddInventory {
 		System.out.print("추가할 상품의 이름을 입력해주세요: ");
 		proname = scan.nextLine();
 		
-		while( !checkBlank(proname) || proname.matches(".*[^ㄱ-ㅎㅏ-ㅣ가-힣]+.*") || (proname.length() > 10) )	//상품명 예외처리
+		while( !checkBlank(proname) || proname.matches(".*[^ㄱ-ㅎㅏ-ㅣ가-힣]+.*") || (proname.length() > 10) || (proname.length() < 1) )	//상품명 예외처리
 		{
 			System.out.print("잘못된 입력, 다시 입력해주세요(ONLY 한글, 10글자, 공백제외): ");
 			proname = scan.nextLine();
@@ -73,7 +73,7 @@ public class AddInventory {
 		System.out.print("추가할 개수를 입력해주세요: ");
 		String temp = scan.nextLine();
 		
-		while( !checkBlank(temp) || temp.matches(".*[^0-9]+.*") || (temp.length() > 3) || temp.substring(0, 1).equals("0"))	//추가 개수 예외처리
+		while( !checkBlank(temp) || temp.matches(".*[^0-9]+.*") || (temp.length() < 1) || (temp.length() > 3) || temp.substring(0, 1).equals("0"))	//추가 개수 예외처리
 		{
 			System.out.print("잘못된 입력, 다시 입력해주세요(ONLY 숫자, 3글자 이하, 공백제외, 선행 0 비허용): ");
 			temp = scan.nextLine();
