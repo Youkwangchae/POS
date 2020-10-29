@@ -16,7 +16,7 @@ public class DisposalRegister {
 	Set<String> set; 														//키 값을 저장하는 set
 	Iterator<String> it; 													//set 검색을 위한 iterator
 	String key, today;														//Set에서 검색을 위한 스트링 변수, 오늘 날짜
-	boolean check;															//검색 성공 여부 확인
+	boolean check = false;													//검색 성공 여부 확인
 	
 	public DisposalRegister(Db db) throws InterruptedException, IOException
 	{
@@ -49,13 +49,11 @@ public class DisposalRegister {
 						check = true;
 						System.out.println(products.get(j).getCode() + "/" + products.get(j).getName() + "/" + products.get(j).getEpdate() + "/" + products.get(j).getPrice());
 					}
-					else
-						check = false;
 				}
 			}
 			
 			 if(!check)
-				 System.out.println("\n유통기한 지난 상품들이 없습니다..");
+				 System.out.println("\n유통기한 지난 상품들이 없습니다.");
 			 else
 			 {
 				 System.out.println("\n\n\n");
