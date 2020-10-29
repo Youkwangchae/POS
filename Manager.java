@@ -1,8 +1,11 @@
 package sw.pos;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Scanner;
+import java.util.Set;
 
 public class Manager {
 	Scanner scan = new Scanner(System.in);
@@ -21,7 +24,7 @@ public class Manager {
 		while(true) {
 		System.out.println("종료하시려면 \"종료\"를 입력해주세요");
 		System.out.print("날짜입력 : ");
-		date = scan.next();
+		date = scan.nextLine();
 		if(date.equals("종료")) {
 			return;
 		}
@@ -61,12 +64,13 @@ public class Manager {
 							switch(date.charAt(4)-'0') {
 							case 0:
 								if(month>=1 && month<=9) {
-									if(Integer.parseInt(date.substring(6)) <= days[month-1])
+									if(Integer.parseInt(date.substring(6)) <= days[month-1]&&Integer.parseInt(date.substring(6))>0)
 										possible = true;
 								}
+								break;
 							case 1:
 								if(month>=0&&month<=2)
-									if(Integer.parseInt(date.substring(6)) <= days[10+month-1])
+									if(Integer.parseInt(date.substring(6)) <= days[10+month-1]&&Integer.parseInt(date.substring(6))>0)
 										possible = true;
 							}
 						}
@@ -109,7 +113,7 @@ public class Manager {
 			if(cnt!=0)
 				System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
 			System.out.print("\n메뉴 선택: ");
-			select = scan.next();
+			select = scan.nextLine();
 			cnt++;
 		}
 		while(!select.matches("[1-6]"));
@@ -120,6 +124,8 @@ public class Manager {
 				pay.startPay();
 				break;
 			case 2: //2. 환불하기
+				Refund r=new Refund(db);
+				r.RefundS();
 				break;
 			case 3: //3. 재고관리	
 				InventoryManager im = new InventoryManager(db);
@@ -129,6 +135,7 @@ public class Manager {
 				c_Manager.ManageCash();
 				break;
 			case 5: //5. 매출확인
+				totalCash();
 				break;
 			case 6: //6. 종료
 				con = false;
@@ -136,6 +143,38 @@ public class Manager {
 		}
 		
 		}
+	}
+	
+	public void totalCash() {
+		//입력한 날짜의 PaymentList에 있는 결제 값들만 더해주면 됨.
+		//종료 입력하면 다시 돌아감. @로 나누고 맨 앞 substring.
+		int total = 0;
+		HashMap<String, ArrayList<Product>> pays = db.getPayments();
+		Set <String>keys = pays.keySet();
+		Iterator<String> it = keys.iterator();
+		String key = it.next();
+		String date = "";
+		while(it.hasNext()) {
+			key = it.next();
+			date = "20"+it.next().substring(0,6);
+			if(date.equals(last_date)) {
+				for(int j=0;j<pays.get(key).size();j++)
+				total += pays.get(key).get(j).getPrice();
+			}
+			
+		}
+		
+		System.out.println("오늘 "+m_date+"의 매출현황입니다.");
+		System.out.println(total);
+		System.out.println("메인 메뉴로 돌아가시려면 \"완료\"를 입력해주세요. :");
+		String temp = scan.nextLine();
+		
+		while( (!temp.matches("완료")))	//추가 개수 예외처리
+		{
+				System.out.print("잘못된 입력, 다시 입력해주세요(ONLY 완료): ");
+				temp = scan.nextLine();
+		}	
+		System.out.println("메인 메뉴로 돌아갑니다.");
 	}
 }
 	

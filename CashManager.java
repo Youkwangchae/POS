@@ -6,23 +6,38 @@ import java.util.Scanner;
 public class CashManager {
 	Scanner scan = new Scanner(System.in);
 	private Db db;
-	private HashMap<Integer, Integer> cash = db.getCash();
+	private HashMap<Integer, Integer> cash;
 	private int [] key = {10, 50, 100, 500, 1000, 5000, 10000, 50000};//현금 종류.
 	public CashManager(Db db) {
 		this.db = db;
+		this.cash = db.getCash();
 	}
 	
 	public void ManageCash() {
+		boolean con = true;
+		while(con) {
 		HashMap<Integer, Integer>cash = db.getCash();
+		for(int i=0;i<8;i++) 
+			System.out.println((i+1)+"."+key[i]+"원 "+cash.get(key[i])+"개");
+		System.out.println();
+		
+		for(int i=0;i<8;i++) 
+			System.out.println((i+1)+"."+key[i]+"원");
+		
 		String money ="";
 		int count = 0;
 		do {
 			if(count!=0)
 				System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
 			System.out.print("충전할 지폐(동전)를 선택해주세요 : ");
-			money = scan.next();
+			money = scan.nextLine();
+			count++;
 		}
-		while(!money.matches("[1-8]"));
+		while(!money.matches("[1-8]|완료"));
+		if(money.equals("완료")) {
+			con = false;
+		}	
+		else {
 			if(isPossible(Integer.parseInt(money))) {
 				
 				String insert = "";
@@ -33,10 +48,20 @@ public class CashManager {
 				else if(num!=0)
 						System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
 					System.out.print("총 몇 개의 지폐를 추가하실 건가요 ? : ");
-					insert=scan.next();
-				}while(!insert.matches("[1-9]{1,2}|[1-9]"));
-				setCash(cash.get(key[Integer.parseInt(money)-1]), Integer.parseInt(insert), false);
+					insert=scan.nextLine();
+				}while(!insert.matches("[1-9][0-9]|[1-9]"));
+				System.out.println("정말 이렇게 추가하실 건가요? (Y 또는 N 입력)");
+				String ans = "";
+				ans = scan.nextLine();
+				while(!ans.matches("Y|N")) {
+					System.out.println("잘못된 입력입니다. Y 또는 N만 입력해주세요.");
+				}
+				if(ans.equals("Y"))
+					setCash(key[Integer.parseInt(money)-1], Integer.parseInt(insert), false);
+				
 			}
+		}
+		}
 	}
 	
 	public boolean isPossible(int i) {
@@ -71,5 +96,9 @@ public class CashManager {
 				db.setCash(unit, 99-num, isNegative);
 			}
 			}
+	}
+	
+	public int getKeyindex(int i) {
+		return key[i];
 	}
 }
