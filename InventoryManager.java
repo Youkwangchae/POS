@@ -40,7 +40,7 @@ public class InventoryManager {
 				DisposalRegister dr = new DisposalRegister(db);
 				break;
 			case "4":			//4. 종료
-				System.out.println("재고관리을 종료합니다.");
+				System.out.println("재고관리를 종료합니다.\n");
 				break;		
 			}
 		}while(!menu.equals("4"));
