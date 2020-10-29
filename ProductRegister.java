@@ -114,7 +114,7 @@ public class ProductRegister
 		System.out.print("해당 상품의 가격을 입력해주세요: ");	//가격 입력
 		price = scan.nextLine();
 		
-		while( !checkBlank(price) || price.matches(".*[^0-9]+.*") || price.length() < 1 || price.length() > 8  || price.substring(0, 1).equals("0"))	//가격 예외처리
+		while( !checkBlank(price) || price.matches(".*[^0-9]+.*") || price.length() < 1 || price.length() > 8  || price.substring(0, 1).equals("0") || !checkBlank(price))	//가격 예외처리
 		{
 			System.out.print("잘못된 입력, 다시 입력해주세요(ONLY 숫자, 8글자 이하, 공백제외, 선행 0 비허용): ");
 			price = scan.nextLine();
@@ -127,12 +127,12 @@ public class ProductRegister
 		System.out.println("유통기한 설정 값: " + ep_value);
 		System.out.println("가격: " + price);
 		System.out.print("\n해당 상품을 정말로 추가하시겠습니까?(Y/N) ");
-		String answer = scan.next();
+		String answer = scan.nextLine();
 		
 		while(!(answer.equals("Y") || answer.equals("N")) || !checkBlank(answer))
 		{
 			System.out.print("잘못된 입력, 다시 입력해주세요(ONLY Y\\N, 1글자, 공백제외): ");
-			answer = scan.next();
+			answer = scan.nextLine();
 		}
 		
 		if(answer.equals("Y"))
