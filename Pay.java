@@ -20,8 +20,8 @@ public class Pay {
 	
 	public Pay(Db db, String date) {
 		this.date = date;
-		this.count = 0;
 		this.db = db;
+		this.count = this.getCount();
 		this.sc = new Scanner(System.in);
 		this.products = db.getProducts();
 		this.cash = db.getCash();
@@ -74,25 +74,26 @@ public class Pay {
 				for(int i = 0; i < this.products.get(file_name).size(); i++) {
 					if(this.products.get(file_name).get(i).getCode().indexOf(answer.substring(0, 4)) == 0) {
 						
-						if(this.products.get(file_name).get(i).getCode().equals(answer)&&this.isEdatePassed(this.products.get(file_name).get(i).getEpdate())) {
-							System.out.println("유통기한이 지난 상품입니다.");
-							exist = true;
-							break;
-						}
-						
-						for(int j = 0; j < products_payment.size(); j++) {
-							if(this.products_payment.get(j).getCode().equals(answer)) {
-								System.out.println("이미 존재하는 상품입니다.");
+						if(this.products.get(file_name).get(i).getCode().equals(answer)) {
+							if(this.isEdatePassed(this.products.get(file_name).get(i).getEpdate())) {
+								System.out.println("유통기한이 지난 상품입니다.");
 								exist = true;
 								break;
 							}
-							
-						}
-						if(!exist) {
-							System.out.println("상품이 추가되었습니다.");
-							products_payment.add(this.products.get(file_name).get(i));
-							break;
-						}						
+							for(int j = 0; j < products_payment.size(); j++) {
+								if(this.products_payment.get(j).getCode().equals(answer)) {
+									System.out.println("이미 존재하는 상품입니다.");
+									exist = true;
+									break;
+								}
+								
+							}
+							if(!exist) {
+								System.out.println("상품이 추가되었습니다.");
+								products_payment.add(this.products.get(file_name).get(i));
+								break;
+							}	
+						}				
 					}
 				}
 				if(exist)
@@ -191,6 +192,7 @@ public class Pay {
 		String answer = "";
 		int[] money_type = {50000, 10000, 5000, 1000, 500, 100, 50, 10};
 		HashMap<Integer, Integer> charge = new HashMap<>();
+		HashMap<Integer, Integer> in = new HashMap<>();
 		charge.put(50000, 0);
 		charge.put(10000, 0);
 		charge.put(5000, 0);
@@ -199,6 +201,15 @@ public class Pay {
 		charge.put(100, 0);
 		charge.put(50, 0);
 		charge.put(10, 0);
+		
+		in.put(50000, 0);
+		in.put(10000, 0);
+		in.put(5000, 0);
+		in.put(1000, 0);
+		in.put(500, 0);
+		in.put(100, 0);
+		in.put(50, 0);
+		in.put(10, 0);
 		while(true) {
 			try {
 				System.out.print("받은 금액을 입력해주세요 : ");
@@ -233,6 +244,16 @@ public class Pay {
 				num-=total;
 				boolean flag = false;
 				
+				for(int j = 0; j < money_type.length; j++) {
+					int m = money_type[j];
+					//in.put(m, 0);
+					in.put(m, total / m);
+					total %= m;
+
+					if(total == 0) {
+						break;
+					}
+				}
 				
 				for(int j = 0; j < money_type.length; j++) {
 					int m = money_type[j];
@@ -245,6 +266,7 @@ public class Pay {
 						else {
 							break;
 						}
+						
 					}
 					if(num == 0) {
 						flag = true;
@@ -260,6 +282,10 @@ public class Pay {
 					for(int j = 0; j < money_type.length; j++) {
 						int m = money_type[j];
 						db.setCash(m, charge.get(m), true);
+					}
+					for(int j = 0; j < money_type.length; j++) {
+						int m = money_type[j];
+						db.setCash(m, in.get(m), false);
 					}
 					break;
 				}
@@ -302,6 +328,7 @@ public class Pay {
 	
 	public boolean isEdatePassed(String Epdate) {
 		int year = Integer.parseInt(Epdate.substring(0, 4));
+		
 		int month = Integer.parseInt(Epdate.substring(4, 6));
 		int date = Integer.parseInt(Epdate.substring(6, 8));
 		
@@ -338,6 +365,25 @@ public class Pay {
 		}
 		return false;
 	}
+	
+	public int getCount() {
+		HashMap<String, ArrayList<Product>> pays = db.getPayments();
+		Set <String>keys = pays.keySet();
+		Iterator<String> it = keys.iterator();
+		String key = "";
+		int total = 0;
+		while(it.hasNext()) {
+			key = it.next();
+			String date = "20"+it.next().substring(0,6);
+			if(date.equals(this.date)) {
+				total++;
+			}
+		}
+		//System.out.println(total);
+		return total;
+		
+	}
+	
 	
 	public void printProducts() {
 		int total = 0;
@@ -429,7 +475,8 @@ public class Pay {
 			System.out.println("잘못된 입력 입니다-길이가 1 미만입니다");
 		return false;
 	}
-
+	
+	
 	public boolean checkC_YN(String YN) {
 		for (char c : YN.toCharArray()) {
 			if ((c == 78) || (c == 89)) {
