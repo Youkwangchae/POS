@@ -35,10 +35,20 @@ public class Pay {
 		while(true) {
 			printProducts();
 			System.out.print("상품코드를 입력해주세요(마치려면 완료):");
-			answer = sc.next();
+			answer = sc.nextLine();
 			if(answer.equals("완료")) {
-				screen.ScreenClear();
-				break;
+				if(!products_payment.isEmpty()) {
+					screen.ScreenClear();
+					break;
+				}
+				else {
+					System.out.println("상품코드를 입력하셔야 합니다.");
+					continue;
+				}
+			}
+			
+			if(!checkBlank(answer)) {
+				continue;
 			}
 			
 			if(answer.length() != 6) {
@@ -98,18 +108,24 @@ public class Pay {
 	}
 	
 	public void choose() throws InterruptedException, IOException { //결제수단선택
-		int answer;
+		String answer;
 		while(true) {
 			try {
+				
 				System.out.print("결제수단을 선택해주세요(1.현금, 2.카드)");
-				answer = sc.nextInt();
-				if(answer == 1) {
+				answer = sc.nextLine();
+				
+				
+				if(answer.equals("1")) {
 					purchase(1);
 					break;
 				}
-				else if(answer == 2) {
+				else if(answer.equals("2")) {
 					purchase(2);
 					break;
+				}
+				else if(!checkBlank(answer)) {
+					continue;
 				}
 				else {
 					System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
@@ -134,25 +150,34 @@ public class Pay {
 			else
 				System.out.println("카드");
 			System.out.print("결제하시겠습니까?(Y/N)");
-			answer = sc.next();
+			answer = sc.nextLine();
 			
-			if(answer.equals("Y")) {
-				if(type == 1) {
-					sendMoney();
-					break;
-				}
-				else {
-					for(int k = 0; k < products_payment.size(); k++)
-						products_payment.get(k).setPayByCash(false);
-					successPay();
-					screen.ScreenClear();
-					System.out.println("카드 결제가 완료되었습니다.");
-					break;
-				}
+			if(!this.checkBlank(answer)) {
+				continue;
 			}
-			else if(answer.equals("N")) {
-				
-				return;
+			
+			
+			if(this.checkL_YN(answer)) {
+				if(this.checkC_YN(answer)) {
+					if(answer.equals("Y")) {
+						if(type == 1) {
+							sendMoney();
+							break;
+						}
+						else {
+							for(int k = 0; k < products_payment.size(); k++)
+								products_payment.get(k).setPayByCash(false);
+							successPay();
+							screen.ScreenClear();
+							System.out.println("카드 결제가 완료되었습니다.");
+							break;
+						}
+					}
+					else if(answer.equals("N")) {
+						return;
+					}
+				}
+
 			}
 			else {
 				System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
@@ -163,7 +188,7 @@ public class Pay {
 	
 	public void sendMoney() throws InterruptedException, IOException { //금액입력
 		//5만원, 만원, 오천원, 천원, 오백원, 백원, 오십원, 십원
-		int answer = 0;
+		String answer = "";
 		int[] money_type = {50000, 10000, 5000, 1000, 500, 100, 50, 10};
 		HashMap<Integer, Integer> charge = new HashMap<>();
 		charge.put(50000, 0);
@@ -177,17 +202,23 @@ public class Pay {
 		while(true) {
 			try {
 				System.out.print("받은 금액을 입력해주세요 : ");
-				answer = sc.nextInt();
-				if(answer < 0) {
-					System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
-					continue;
-				}
-				int total = getTotalPay();
-				if(answer < total) {
-					System.out.println("받은 금액이 부족합니다. 다시 입력해주세요.");
+				answer = sc.nextLine();
+				if(!this.checkBlank(answer)) {
 					continue;
 				}
 				
+				if(!this.check_alphabet(answer)) {
+					System.out.println("잘못된 입력입니다. -숫자가 아닌게 들어있습니다.");
+					continue;
+				}
+				
+				int num = Integer.parseInt(answer);
+				
+				int total = getTotalPay();
+				if(num < total) {
+					System.out.println("받은 금액이 부족합니다. 다시 입력해주세요.");
+					continue;
+				}
 				
 				boolean flag = false;
 				for(int j = 0; j < money_type.length; j++) {
@@ -354,6 +385,49 @@ public class Pay {
 		}
 		return total;
 	}
+	public boolean checkBlank(String PayCode) {// 선후 공백 체크
+		for (int i = 0; i < PayCode.length(); i++) {
+			if (PayCode.charAt(i) == ' ') {
+				System.out.println("잘못된 입력 입니다-공백이 들어있습니다");
+				return false;
+			}
+		}
+		return true;
+	}
 	
+	public boolean check_alphabet(String a) {
+		for(char c : a.toCharArray()) {
+			if(c >= 48 && c <= 57) {
+				continue;
+			}
+			else {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public boolean checkL_YN(String YN) {
+		if (YN.length() == 1) {
+			return true;
+		}
+		if (YN.length() > 1)
+			System.out.println("잘못된 입력 입니다-길이가 1 초과입니다");
+		else
+			System.out.println("잘못된 입력 입니다-길이가 1 미만입니다");
+		return false;
+	}
+
+	public boolean checkC_YN(String YN) {
+		for (char c : YN.toCharArray()) {
+			if ((c == 78) || (c == 89)) {
+				continue;
+			} else {
+				System.out.println("잘못된 입력입니다-YN외에 다른 문자가 있습니다");
+				return false;
+			}
+		}
+		return true;
+	}
 	
 }
