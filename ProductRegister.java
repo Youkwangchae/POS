@@ -23,19 +23,15 @@ public class ProductRegister
 	
 	public ProductRegister(Db db) throws InterruptedException, IOException
 	{
-		Refund re = new Refund(db);
 		this.db = db;
 		products = db.getNames();
 		categorys = db.getCategorys();
 		System.out.print("등록할 상품명을 입력해주세요: ");
 		proname = scan.nextLine();
 		
-		while( !re.checkBlank(proname) || proname.matches(".*[^(ㄱ-ㅎㅏ-ㅣ가-힣)]+.*") || (proname.length() > 10) )	//상품명 예외처리
+		while( !checkBlank(proname) || proname.matches(".*[^(ㄱ-ㅎㅏ-ㅣ가-힣)]+.*") || (proname.length() > 10) )	//상품명 예외처리
 		{
-			if(re.checkBlank(proname)) 
-				System.out.print("잘못된 입력, 다시 입력해주세요(ONLY 한글, 10글자 이하): ");
-			else
-				System.out.print("다시 입력해주세요: ");
+			System.out.print("잘못된 입력, 다시 입력해주세요(ONLY 한글, 10글자, 공백제외): ");
 			proname = scan.nextLine();
 		}
 		
@@ -56,12 +52,9 @@ public class ProductRegister
 		System.out.print("해당 상품의 카테고리를 입력해주세요: ");	//카테고리명 입력
 		catename = scan.nextLine();
 		
-		while( !re.checkBlank(catename) || catename.matches(".*[^ㄱ-ㅎㅏ-ㅣ가-힣]+.*") || (catename.length() > 10) )	//카테고리명 예외처리
+		while( !checkBlank(catename) || catename.matches(".*[^ㄱ-ㅎㅏ-ㅣ가-힣]+.*") || (catename.length() > 10) )	//카테고리명 예외처리
 		{
-			if(re.checkBlank(catename)) 
-				System.out.print("잘못된 입력, 다시 입력해주세요(ONLY 한글, 10글자 이하): ");
-			else
-				System.out.print("다시 입력해주세요: ");
+			System.out.print("잘못된 입력, 다시 입력해주세요(ONLY 한글, 10글자 이하, 공백제외): ");
 			catename = scan.nextLine();
 		}
 		
@@ -111,12 +104,9 @@ public class ProductRegister
 		System.out.print("해당 상품의 유통기한 설정 값을 입력해주세요: ");	//유통기한 설정 값 입력
 		ep_value = scan.nextLine();
 		
-		while( !re.checkBlank(ep_value) || ep_value.matches(".*[^0-9]+.*") || ep_value.length() < 1 || ep_value.length() > 3 || ep_value.substring(0, 1).equals("0"))	//유통기한 설정 값 예외처리
+		while( !checkBlank(ep_value) || ep_value.matches(".*[^0-9]+.*") || ep_value.length() < 1 || ep_value.length() > 3 || ep_value.substring(0, 1).equals("0"))	//유통기한 설정 값 예외처리
 		{
-			if(re.checkBlank(ep_value)) 
-				System.out.print("잘못된 입력, 다시 입력해주세요(ONLY 숫자, 1자리 이상 3자리 이하): ");
-			else
-				System.out.print("다시 입력해주세요: ");
+			System.out.print("잘못된 입력, 다시 입력해주세요(ONLY 숫자, 3글자 이하, 공백제외, 선행 0 비허용): ");
 			ep_value = scan.nextLine();
 		}
 		
@@ -124,12 +114,9 @@ public class ProductRegister
 		System.out.print("해당 상품의 가격을 입력해주세요: ");	//가격 입력
 		price = scan.nextLine();
 		
-		while( !re.checkBlank(price) || price.matches(".*[^0-9]+.*") || price.length() < 1 || price.length() > 8  || price.substring(0, 1).equals("0"))	//가격 예외처리
+		while( !checkBlank(price) || price.matches(".*[^0-9]+.*") || price.length() < 1 || price.length() > 8  || price.substring(0, 1).equals("0"))	//가격 예외처리
 		{
-			if(re.checkBlank(price)) 
-				System.out.print("잘못된 입력, 다시 입력해주세요(ONLY 숫자, 1자리 이상 8자리 이하): ");
-			else
-				System.out.print("다시 입력해주세요: ");
+			System.out.print("잘못된 입력, 다시 입력해주세요(ONLY 숫자, 8글자 이하, 공백제외, 선행 0 비허용): ");
 			price = scan.nextLine();
 		}
 		
@@ -142,15 +129,14 @@ public class ProductRegister
 		System.out.print("\n해당 상품을 정말로 추가하시겠습니까?(Y/N) ");
 		String answer = scan.next();
 		
-		while(!(answer.equals("Y") || answer.equals("N")))
+		while(!(answer.equals("Y") || answer.equals("N")) || !checkBlank(answer))
 		{
-			System.out.print("잘못된 입력입니다. 다시 입력해주세요(Y/N) ");
+			System.out.print("잘못된 입력, 다시 입력해주세요(ONLY Y\\N, 1글자, 공백제외): ");
 			answer = scan.next();
 		}
 		
 		if(answer.equals("Y"))
 		{
-	
 			db.addNames(proname, code, Integer.parseInt(ep_value), Integer.parseInt(price));
 			db.addCategory(catename);
 			System.out.println("상품등록이 완료되었습니다.");
@@ -159,9 +145,16 @@ public class ProductRegister
 		else if(answer.equals("N"))
 			System.out.println("재고 관리로 돌아갑니다.");
 		
+	}
 	
-		
-	
+	public boolean checkBlank(String PayCode)	// 선후 공백 체크
+	{
+	      String B_PayCode=PayCode.replaceAll("\\s+", "");
+	     
+	      if(B_PayCode.equals(PayCode)) 		//공백이 없는 거
+	         return true;
+	      else									//공백이 있는 거
+	    	  return false;
 	}
 	
 }
