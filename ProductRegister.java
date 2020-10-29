@@ -29,7 +29,7 @@ public class ProductRegister
 		System.out.print("등록할 상품명을 입력해주세요: ");
 		proname = scan.nextLine();
 		
-		while( !checkBlank(proname) || proname.matches(".*[^(ㄱ-ㅎㅏ-ㅣ가-힣)]+.*") || (proname.length() > 10) )	//상품명 예외처리
+		while( !checkBlank(proname) || proname.matches(".*[^(ㄱ-ㅎㅏ-ㅣ가-힣)]+.*") || (proname.length() > 10) || (proname.length() < 1) )	//상품명 예외처리
 		{
 			System.out.print("잘못된 입력, 다시 입력해주세요(ONLY 한글, 10글자, 공백제외): ");
 			proname = scan.nextLine();
@@ -52,7 +52,7 @@ public class ProductRegister
 		System.out.print("해당 상품의 카테고리를 입력해주세요: ");	//카테고리명 입력
 		catename = scan.nextLine();
 		
-		while( !checkBlank(catename) || catename.matches(".*[^ㄱ-ㅎㅏ-ㅣ가-힣]+.*") || (catename.length() > 10) )	//카테고리명 예외처리
+		while( !checkBlank(catename) || catename.matches(".*[^ㄱ-ㅎㅏ-ㅣ가-힣]+.*") || (catename.length() > 10) || (catename.length() < 1) )	//카테고리명 예외처리
 		{
 			System.out.print("잘못된 입력, 다시 입력해주세요(ONLY 한글, 10글자 이하, 공백제외): ");
 			catename = scan.nextLine();
