@@ -12,6 +12,7 @@ public class InventoryManager {
 	{
 		do
 		{	
+			sc.ScreenClear();
 			System.out.println("1. 상품등록");
 			System.out.println("2. 재고추가");
 			System.out.println("3. 폐기등록");
@@ -43,6 +44,7 @@ public class InventoryManager {
 				System.out.println("재고관리를 종료합니다.\n");
 				break;		
 			}
+			Thread.sleep(300);
 		}while(!menu.equals("4"));
 	}
 	
