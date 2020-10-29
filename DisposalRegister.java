@@ -28,6 +28,7 @@ public class DisposalRegister {
 	
 	public void ShowDisposal(String today) throws InterruptedException, IOException
 	{
+		Refund re = new Refund(db);
 		ArrayList<Product> products = new ArrayList();
 		HashMap<String, CategoryInfo> Category = fileio.readCategory();	//
 		String filename, answer;
@@ -63,19 +64,23 @@ public class DisposalRegister {
 				
 			 }
 			 
-			 answer = scan.next();
+			 answer = scan.nextLine();
 			 
 			 if(!answer.equals("완료"))		//완료가 아니면
 			 {
-				 while( (!answer.matches(".*[A-Z]+.*")) || answer.length() != 6 )	//추가 개수 예외처리
+				 while( (!answer.matches(".*[a-Z][A-Z]+.*")) || answer.length() != 6 )	//추가 개수 예외처리
 				 {
-					 System.out.print("잘못된 입력, 다시 입력해주세요(ONLY 로마자 대문자, 6글자): ");
-					 answer = scan.next();
+					 if(re.checkBlank(answer)) 
+						 System.out.print("잘못된 입력, 다시 입력해주세요(ONLY 영어, 6글자): ");
+					 answer = scan.nextLine();
 					 if(answer.equals("완료"))		
 						 break;
 				 }
 				 if(!answer.equals("완료"))		//완료가 아니면
+				 {
+					 answer = answer.toUpperCase();
 					 CheckDisposal(answer);
+				 }
 			 }
 		}while(!answer.equals("완료"));
 	
@@ -92,7 +97,7 @@ public class DisposalRegister {
 		 
 		 while(!( yn.equals("Y") || yn.equals("N") ))
 		 {
-			 System.out.print("잘못된 입력, 다시 입력해주세요(ONLY 로마자 대문자, 6글자): ");
+			 System.out.print("잘못된 입력, 다시 입력해주세요(ONLY 로마자 대문자, 1글자): ");
 			 procode = scan.next();
 		 }
 		 
