@@ -229,7 +229,7 @@ public class Pay {
 					System.out.println("받은 금액이 부족합니다. 다시 입력해주세요.");
 					continue;
 				}
-				
+				total-=num;
 				boolean flag = false;
 				for(int j = 0; j < money_type.length; j++) {
 					int m = money_type[j];
