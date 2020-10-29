@@ -149,7 +149,7 @@ public class Db {
 				str+="/0\n";
 			}
 		}
-		str+="@\n";
+		str+="@";
 		fileio.writeFile("PaymentList.txt", str);
 	}
 	//결제한 상품 삭제 기능
@@ -157,11 +157,12 @@ public class Db {
 		for(int i=0; i<payments.get(pay_code).size(); i++) {
 			if(payments.get(pay_code).get(i).getCode().equals(pro_code)) {
 				payments.get(pay_code).remove(i);
-				if(payments.get(pay_code).isEmpty()) {
-					payments.remove(pay_code);
-				}
 				break;
 			}
+		}
+		
+		if(payments.get(pay_code).isEmpty()) {
+			payments.remove(pay_code);
 		}
 		
 		Set<String> set = payments.keySet();
