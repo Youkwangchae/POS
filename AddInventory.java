@@ -22,16 +22,18 @@ public class AddInventory {
 	
 	public AddInventory(Db db)
 	{
+		Refund re = new Refund(db);
 		this.db = db;
 		products = db.getNames();	
 		today = db.getLast_date();
 		System.out.print("추가할 상품의 이름을 입력해주세요: ");
-		proname = scan.next();
+		proname = scan.nextLine();
 		
 		while( (!proname.matches(".*[ㄱ-ㅎㅏ-ㅣ가-힣]+.*")) || (proname.length() > 10) )	//상품명 예외처리
 		{
-			System.out.print("잘못된 입력, 다시 입력해주세요(ONLY 한글, 10글자 이하): ");
-			proname = scan.next();
+			if(re.checkBlank(proname)) 
+				System.out.print("잘못된 입력, 다시 입력해주세요(ONLY 한글, 10글자 이하): ");
+			proname = scan.nextLine();
 		}
 		
 		set = products.keySet();			//올바른 상품명을 입력받은 경우 이미 있는 이름인지 검색
@@ -71,12 +73,13 @@ public class AddInventory {
 			
 		
 		System.out.print("추가할 개수를 입력해주세요: ");
-		String temp = scan.next();
+		String temp = scan.nextLine();
 		
 		while( (!temp.matches(".*[0-9]+.*")) || (temp.length() > 3) )	//추가 개수 예외처리
 		{
-			System.out.print("잘못된 입력, 다시 입력해주세요(ONLY 숫자, 3글자 이하): ");
-			temp = scan.next();
+			if(re.checkBlank(temp)) 
+				System.out.print("잘못된 입력, 다시 입력해주세요(ONLY 숫자, 3글자 이하): ");
+			temp = scan.nextLine();
 		}	
 		procount = Integer.parseInt(temp);
 		if(procount > 676)					//676이상이면 676개만 저장
