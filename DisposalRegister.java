@@ -59,19 +59,19 @@ public class DisposalRegister {
 			 {
 				 System.out.println("\n\n\n");
 				 System.out.println("폐기할 상품의 상품코드를 입력해주세요");
-				 System.out.println("종료하시려면 \"완료\"를 입력하세요");
-				 
-				
+				 System.out.println("종료하시려면 \"완료\"를 입력하세요");		
 			 }
 			 
 			 answer = scan.nextLine();
 			 
 			 if(!answer.equals("완료"))		//완료가 아니면
 			 {
-				 while( (!answer.matches(".*[a-Z][A-Z]+.*")) || answer.length() != 6 )	//추가 개수 예외처리
+				 while( !re.checkBlank(answer) || (!answer.matches(".*[a-Z][A-Z]+.*")) || answer.length() != 6 )	//추가 개수 예외처리
 				 {
 					 if(re.checkBlank(answer)) 
 						 System.out.print("잘못된 입력, 다시 입력해주세요(ONLY 영어, 6글자): ");
+					 else
+						 System.out.print("다시 입력해주세요: ");
 					 answer = scan.nextLine();
 					 if(answer.equals("완료"))		
 						 break;
