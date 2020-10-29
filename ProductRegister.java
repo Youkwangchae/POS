@@ -30,10 +30,12 @@ public class ProductRegister
 		System.out.print("등록할 상품명을 입력해주세요: ");
 		proname = scan.nextLine();
 		
-		while( (!proname.matches(".*[ㄱ-ㅎㅏ-ㅣ가-힣]+.*")) || (proname.length() > 10) )	//상품명 예외처리
+		while( !re.checkBlank(proname) || (!proname.matches(".*[ㄱ-ㅎㅏ-ㅣ가-힣]+.*")) || (proname.length() > 10) )	//상품명 예외처리
 		{
 			if(re.checkBlank(proname)) 
 				System.out.print("잘못된 입력, 다시 입력해주세요(ONLY 한글, 10글자 이하): ");
+			else
+				System.out.print("다시 입력해주세요: ");
 			proname = scan.nextLine();
 		}
 		
@@ -54,10 +56,12 @@ public class ProductRegister
 		System.out.print("해당 상품의 카테고리를 입력해주세요: ");	//카테고리명 입력
 		catename = scan.nextLine();
 		
-		while( (!catename.matches(".*[ㄱ-ㅎㅏ-ㅣ가-힣]+.*")) || (catename.length() > 10) )	//카테고리명 예외처리
+		while( !re.checkBlank(catename) || (!catename.matches(".*[ㄱ-ㅎㅏ-ㅣ가-힣]+.*")) || (catename.length() > 10) )	//카테고리명 예외처리
 		{
 			if(re.checkBlank(catename)) 
 				System.out.print("잘못된 입력, 다시 입력해주세요(ONLY 한글, 10글자 이하): ");
+			else
+				System.out.print("다시 입력해주세요: ");
 			catename = scan.nextLine();
 		}
 		
@@ -107,10 +111,12 @@ public class ProductRegister
 		System.out.print("해당 상품의 유통기한 설정 값을 입력해주세요: ");	//유통기한 설정 값 입력
 		ep_value = scan.nextLine();
 		
-		while( (!ep_value.matches(".*[0-9]+.*")) || ep_value.length() < 1 || ep_value.length() > 3 || ep_value.substring(0, 1).equals("0"))	//유통기한 설정 값 예외처리
+		while( !re.checkBlank(ep_value) || (!ep_value.matches(".*[0-9]+.*")) || ep_value.length() < 1 || ep_value.length() > 3 || ep_value.substring(0, 1).equals("0"))	//유통기한 설정 값 예외처리
 		{
 			if(re.checkBlank(ep_value)) 
 				System.out.print("잘못된 입력, 다시 입력해주세요(ONLY 숫자, 1자리 이상 3자리 이하): ");
+			else
+				System.out.print("다시 입력해주세요: ");
 			ep_value = scan.nextLine();
 		}
 		
@@ -118,10 +124,12 @@ public class ProductRegister
 		System.out.print("해당 상품의 가격을 입력해주세요: ");	//가격 입력
 		price = scan.nextLine();
 		
-		while( (!price.matches(".*[0-9]+.*")) || price.length() < 1 || price.length() > 8  || price.substring(0, 1).equals("0"))	//가격 예외처리
+		while( !re.checkBlank(price) ||(!price.matches(".*[0-9]+.*")) || price.length() < 1 || price.length() > 8  || price.substring(0, 1).equals("0"))	//가격 예외처리
 		{
 			if(re.checkBlank(price)) 
 				System.out.print("잘못된 입력, 다시 입력해주세요(ONLY 숫자, 1자리 이상 8자리 이하): ");
+			else
+				System.out.print("다시 입력해주세요: ");
 			price = scan.nextLine();
 		}
 		
