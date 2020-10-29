@@ -126,12 +126,12 @@ public class ProductRegister
 		System.out.println("카테고리명: " + catename);
 		System.out.println("유통기한 설정 값: " + ep_value);
 		System.out.println("가격: " + price);
-		System.out.print("\n해당 상품을 정말로 추가하시겠습니까?(Y/N) ");
+		System.out.print("\n해당 상품을 정말로 추가하시겠습니까?(Y/N): ");
 		String answer = scan.nextLine();
 		
 		while(!(answer.equals("Y") || answer.equals("N")) || !checkBlank(answer))
 		{
-			System.out.print("잘못된 입력, 다시 입력해주세요(ONLY Y\\N, 1글자, 공백제외): ");
+			System.out.print("잘못된 입력, 다시 입력해주세요(ONLY Y/N, 1글자, 공백제외): ");
 			answer = scan.nextLine();
 		}
 		
