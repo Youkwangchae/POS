@@ -135,7 +135,7 @@ public class Manager {
 				break;
 			case 4: //4. 현금관리
 				this.c_Manager = new CashManager(db);
-				c_Manager.ManageCash();
+				c_Manager.ManageCash(false);
 				break;
 			case 5: //5. 매출확인
 				totalCash();

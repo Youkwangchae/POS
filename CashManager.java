@@ -13,7 +13,7 @@ public class CashManager {
 		this.cash = db.getCash();
 	}
 	
-	public void ManageCash() {
+	public void ManageCash(boolean charge) {
 		boolean con = true;
 		while(con) {
 		HashMap<Integer, Integer>cash = db.getCash();
@@ -35,7 +35,8 @@ public class CashManager {
 		}
 		while(!money.matches("[1-8]|완료"));
 		if(money.equals("완료")) {
-			System.out.println("메인 메뉴로 돌아갑니다.");
+			if(!charge)
+				System.out.println("메인 메뉴로 돌아갑니다.");
 			con = false;
 		}	
 		else {
