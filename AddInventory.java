@@ -22,19 +22,15 @@ public class AddInventory {
 	
 	public AddInventory(Db db)
 	{
-		Refund re = new Refund(db);
 		this.db = db;
 		products = db.getNames();	
 		today = db.getLast_date();
 		System.out.print("추가할 상품의 이름을 입력해주세요: ");
 		proname = scan.nextLine();
 		
-		while( !re.checkBlank(proname) || proname.matches(".*[^ㄱ-ㅎㅏ-ㅣ가-힣]+.*") || (proname.length() > 10) )	//상품명 예외처리
+		while( !checkBlank(proname) || proname.matches(".*[^ㄱ-ㅎㅏ-ㅣ가-힣]+.*") || (proname.length() > 10) )	//상품명 예외처리
 		{
-			if(re.checkBlank(proname)) 
-				System.out.print("잘못된 입력, 다시 입력해주세요(ONLY 한글, 10글자 이하): ");
-			else
-				System.out.print("다시 입력해주세요: ");
+			System.out.print("잘못된 입력, 다시 입력해주세요(ONLY 한글, 10글자, 공백제외): ");
 			proname = scan.nextLine();
 		}
 		
@@ -77,12 +73,9 @@ public class AddInventory {
 		System.out.print("추가할 개수를 입력해주세요: ");
 		String temp = scan.nextLine();
 		
-		while( !re.checkBlank(temp) || temp.matches(".*[^0-9]+.*") || (temp.length() > 3) )	//추가 개수 예외처리
+		while( !checkBlank(temp) || temp.matches(".*[^0-9]+.*") || (temp.length() > 3) )	//추가 개수 예외처리
 		{
-			if(re.checkBlank(temp)) 
-				System.out.print("잘못된 입력, 다시 입력해주세요(ONLY 숫자, 3글자 이하): ");
-			else
-				System.out.print("다시 입력해주세요: ");
+			System.out.print("잘못된 입력, 다시 입력해주세요(ONLY 숫자, 3글자 이하, 공백제외): ");
 			temp = scan.nextLine();
 		}	
 		procount = Integer.parseInt(temp);
@@ -142,5 +135,14 @@ public class AddInventory {
 		return ep_date;
 	}
 	
+	public boolean checkBlank(String PayCode)	// 선후 공백 체크
+	{
+	      String B_PayCode=PayCode.replaceAll("\\s+", "");
+	     
+	      if(B_PayCode.equals(PayCode)) 		//공백이 없는 거
+	         return true;
+	      else									//공백이 있는 거
+	    	  return false;
+	}
 }
 
