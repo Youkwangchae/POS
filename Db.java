@@ -131,7 +131,7 @@ public class Db {
 		categorys.put(cate, new CategoryInfo(code, 0));
 		String contents = cate+"/"+code+"/0";
 		fileio.writeFile("Category.txt", contents);
-		fileio.writeFile(code, new ArrayList<String>());
+		fileio.writeFile(code+".txt", new ArrayList<String>());
 	}
 	//결제 기록 추가 함수
 	public void addPayment(String code, ArrayList<Product> list) {
