@@ -19,7 +19,7 @@ public class InventoryManager {
 			System.out.print("메뉴 선택: ");
 			menu = scan.nextLine();
 			
-			while( !checkBlank(menu) || menu.matches(".*[^0-9]+.*") || (menu.length() > 1) )	//명령어 예외처리
+			while( !checkBlank(menu) || menu.matches(".*[^1-4]+.*") || (menu.length() > 1) )	//명령어 예외처리
 			{
 				System.out.print("잘못된 입력, 다시 입력해주세요(ONLY 숫자, 1글자, 공백제외): ");
 				menu = scan.nextLine();
@@ -42,8 +42,6 @@ public class InventoryManager {
 			case "4":			//4. 종료
 				System.out.println("재고관리을 종료합니다.");
 				break;		
-			default:		//잘못된 명령어인  경우
-				System.out.println("명령어가 옳지 않습니다.\n");
 			}
 		}while(!menu.equals("4"));
 	}
