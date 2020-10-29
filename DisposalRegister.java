@@ -11,15 +11,16 @@ public class DisposalRegister {
 	
 	ScreenClear sc = new ScreenClear();
 	Scanner scan = new Scanner(System.in);
-	Db db = new Db();
+	Db db;
 	FileIO fileio = new FileIO();
 	Set<String> set; 														//키 값을 저장하는 set
 	Iterator<String> it; 													//set 검색을 위한 iterator
 	String key, today;														//Set에서 검색을 위한 스트링 변수, 오늘 날짜
-	boolean check;															//검색 성공 여부 확인
+	boolean check = false;													//검색 성공 여부 확인
 	
-	public DisposalRegister() throws InterruptedException, IOException
+	public DisposalRegister(Db db) throws InterruptedException, IOException
 	{
+		this.db = db;
 		today = db.getLast_date();
 		ShowDisposal(today);
 		System.out.println("재고 관리로 돌아갑니다.");
@@ -48,35 +49,34 @@ public class DisposalRegister {
 						check = true;
 						System.out.println(products.get(j).getCode() + "/" + products.get(j).getName() + "/" + products.get(j).getEpdate() + "/" + products.get(j).getPrice());
 					}
-					else
-						check = false;
 				}
 			}
 			
 			 if(!check)
-				 System.out.println("\n유통기한 지난 상품들이 없습니다..");
+				 System.out.println("\n유통기한 지난 상품들이 없습니다.");
 			 else
 			 {
 				 System.out.println("\n\n\n");
 				 System.out.println("폐기할 상품의 상품코드를 입력해주세요");
-				 System.out.println("종료하시려면 \"완료\"를 입력하세요");
-				 
-				
+				 System.out.println("종료하시려면 \"완료\"를 입력하세요");		
 			 }
 			 
-			 answer = scan.next();
+			 answer = scan.nextLine();
 			 
 			 if(!answer.equals("완료"))		//완료가 아니면
 			 {
-				 while( (!answer.matches(".*[A-Z]+.*")) || answer.length() != 6 )	//추가 개수 예외처리
+				 while( !checkBlank(answer) || answer.matches(".*[^a-z A-Z]+.*") || answer.length() != 6 )	//추가 개수 예외처리
 				 {
-					 System.out.print("잘못된 입력, 다시 입력해주세요(ONLY 로마자 대문자, 6글자): ");
-					 answer = scan.next();
+					 System.out.print("잘못된 입력, 다시 입력해주세요(ONLY 영어, 6글자, 공백제외): ");
+					 answer = scan.nextLine();
 					 if(answer.equals("완료"))		
 						 break;
 				 }
 				 if(!answer.equals("완료"))		//완료가 아니면
+				 {
+					 answer = answer.toUpperCase();
 					 CheckDisposal(answer);
+				 }
 			 }
 		}while(!answer.equals("완료"));
 	
@@ -91,9 +91,9 @@ public class DisposalRegister {
 		 System.out.print("해당 상품(" + procode + ")을 정말 폐기하시겠습니까?(Y/N) ");
 		 yn = scan.next();
 		 
-		 while(!( yn.equals("Y") || yn.equals("N") ))
+		 while(!( yn.equals("Y") || yn.equals("N") ) || checkBlank(yn))
 		 {
-			 System.out.print("잘못된 입력, 다시 입력해주세요(ONLY 로마자 대문자, 6글자): ");
+			 System.out.print("잘못된 입력, 다시 입력해주세요(ONLY Y\\N 1글자, 공백제외): ");
 			 procode = scan.next();
 		 }
 		 
@@ -120,5 +120,15 @@ public class DisposalRegister {
 			 fileio.writeFile(filename, contents);
 		 }
 			 
+	}
+	
+	public boolean checkBlank(String PayCode)	// 선후 공백 체크
+	{
+	      String B_PayCode=PayCode.replaceAll("\\s+", "");
+	     
+	      if(B_PayCode.equals(PayCode)) 		//공백이 없는 거
+	         return true;
+	      else									//공백이 있는 거
+	    	  return false;
 	}
 }
