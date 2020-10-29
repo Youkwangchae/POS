@@ -65,7 +65,7 @@ public class AddInventory {
 		if(products.get(proname).getLast_num() >= 26*26)		//해당 상품의 재고가 꽉 찬 경우
 		{
 			System.out.println("해당 상품은 더 이상 재고를 추가할 수 없습니다.");
-			System.out.println("재고 관리로 돌아갑니다.");
+			System.out.println("재고 관리로 돌아갑니다\n.");
 			return;
 		}
 			
