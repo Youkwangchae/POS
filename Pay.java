@@ -42,7 +42,7 @@ public class Pay {
 					break;
 				}
 				else {
-					System.out.println("상품코드를 입력하셔야 합니다.");
+					System.out.println("잘못된 입력입니다. (상품코드가 올바르지 않음)");
 					continue;
 				}
 			}
@@ -386,13 +386,12 @@ public class Pay {
 		return total;
 	}
 	public boolean checkBlank(String PayCode) {// 선후 공백 체크
-		for (int i = 0; i < PayCode.length(); i++) {
-			if (PayCode.charAt(i) == ' ') {
-				System.out.println("잘못된 입력 입니다-공백이 들어있습니다");
-				return false;
-			}
-		}
-		return true;
+	      String B_PayCode=PayCode.replaceAll("\\s+", "");
+	      if(B_PayCode.equals(PayCode)) {
+	         return true;
+	      }
+	      System.out.println("잘못된 입력 입니다-공백이 들어있습니다");
+	      return false;
 	}
 	
 	public boolean check_alphabet(String a) {
