@@ -28,12 +28,7 @@ public class Db {
 		for(int i=0; i<categorys.size(); i++) {
 			String key = it.next();
 			String file_name = categorys.get(key).getCategory_code();
-			if(categorys.get(key).getLast_num()==0) {
-				products.put(file_name, new ArrayList<Product>());
-			}
-			else {
-				products.put(file_name, fileio.readProduct((file_name+".txt")));
-			}
+			products.put(file_name, fileio.readProduct((file_name+".txt")));
 		}
 	}
 	//상품 추가 함수
@@ -77,19 +72,17 @@ public class Db {
 		}
 		fileio.writeFile((file_name+".txt"), contents);
 	}
-
 	//상품종류(상품이름) 변경 함수
-	public void addNames(String name) 
-	{
+	public void addNames(String name) {
 		names.get(name).addLast_num();
 		Set<String> set = names.keySet();
 		Iterator<String> it = set.iterator();
 		ArrayList<String> contents = new ArrayList<>();
 		String key;
-		for(int i=0; i<names.size(); i++)
-		{
+		for(int i=0; i<names.size(); i++) {
 			key = it.next();
-			String str = key + "/" + names.get(key).getName_code() + "/" + names.get(key).getLast_num() + "/" + names.get(key).getEpd_value() + "/" + names.get(key).getPrice()+ "\n";
+			String str = key + "/" + names.get(key).getName_code() + "/" + names.get(key).getLast_num();
+			str += "/" + names.get(key).getEpd_value()+ "/" + names.get(key).getPrice() +"\n";
 			contents.add(str);
 		}
 		fileio.writeFile("PName.txt", contents);
@@ -138,6 +131,7 @@ public class Db {
 		categorys.put(cate, new CategoryInfo(code, 0));
 		String contents = cate+"/"+code+"/0";
 		fileio.writeFile("Category.txt", contents);
+		fileio.writeFile(code, new ArrayList<String>());
 	}
 	//결제 기록 추가 함수
 	public void addPayment(String code, ArrayList<Product> list) {
@@ -147,7 +141,13 @@ public class Db {
 			str+= list.get(i).getCode();
 			str+="/"+list.get(i).getName();
 			str+="/"+list.get(i).getEpdate();
-			str+="/"+list.get(i).getPrice()+"\n";
+			str+="/"+list.get(i).getPrice();
+			if(list.get(i).getIsPayByCash()==true) {
+				str+="/1\n";
+			}
+			else {
+				str+="/0\n";
+			}
 		}
 		str+="@\n";
 		fileio.writeFile("PaymentList.txt", str);
@@ -207,7 +207,9 @@ public class Db {
 	public HashMap<Integer, Integer> getCash() {
 		return cash;
 	}
+	
 	public HashMap<String, ArrayList<Product>> getPayments() {
 		return payments;
 	}
+	
 }
