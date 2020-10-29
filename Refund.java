@@ -134,11 +134,13 @@ public class Refund {
 									}
 								} else { // 카드 결제인 경우
 									System.out.println(P_price + "원의 카드 환불을 진행합니다\n....\n");
+									isCashCharge="Y";
 									P_price=0;
 								}
 								if (isCashCharge.equals("Y") && YN.equals("Y") && (P_price == 0)) {//현금 환불기능
 									date.addProduct(list.get(index));
 									list.remove(index);
+									System.out.println(PayCode+product_code);
 									date.removePayment(PayCode, product_code);
 									sc=new ScreenClear();
 									System.out.println("환불이 완료됐습니다");
