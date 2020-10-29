@@ -155,11 +155,11 @@ public class Manager {
 		HashMap<String, ArrayList<Product>> pays = db.getPayments();
 		Set <String>keys = pays.keySet();
 		Iterator<String> it = keys.iterator();
-		String key = it.next();
+		String key = "";
 		String date = "";
 		while(it.hasNext()) {
 			key = it.next();
-			date = "20"+it.next().substring(0,6);
+			date = "20"+key.substring(0,6);
 			if(date.equals(last_date)) {
 				for(int j=0;j<pays.get(key).size();j++)
 				total += pays.get(key).get(j).getPrice();
