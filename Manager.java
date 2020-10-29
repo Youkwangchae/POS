@@ -21,7 +21,7 @@ public class Manager {
 		while(true) {
 		System.out.println("종료하시려면 \"종료\"를 입력해주세요");
 		System.out.print("날짜입력 : ");
-		date = scan.next();
+		date = scan.nextLine();
 		if(date.equals("종료")) {
 			return;
 		}
@@ -61,12 +61,13 @@ public class Manager {
 							switch(date.charAt(4)-'0') {
 							case 0:
 								if(month>=1 && month<=9) {
-									if(Integer.parseInt(date.substring(6)) <= days[month-1])
+									if(Integer.parseInt(date.substring(6)) <= days[month-1]&&Integer.parseInt(date.substring(6))>0)
 										possible = true;
 								}
+								break;
 							case 1:
 								if(month>=0&&month<=2)
-									if(Integer.parseInt(date.substring(6)) <= days[10+month-1])
+									if(Integer.parseInt(date.substring(6)) <= days[10+month-1]&&Integer.parseInt(date.substring(6))>0)
 										possible = true;
 							}
 						}
@@ -109,7 +110,7 @@ public class Manager {
 			if(cnt!=0)
 				System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
 			System.out.print("\n메뉴 선택: ");
-			select = scan.next();
+			select = scan.nextLine();
 			cnt++;
 		}
 		while(!select.matches("[1-6]"));
