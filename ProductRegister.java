@@ -140,11 +140,10 @@ public class ProductRegister
 			db.addNames(proname, code, Integer.parseInt(ep_value), Integer.parseInt(price));
 			db.addCategory(catename);
 			System.out.println("상품등록이 완료되었습니다.");
-			System.out.println("재고 관리로 돌아갑니다.");
+			System.out.println("재고 관리로 돌아갑니다.\n");
 		}
 		else if(answer.equals("N"))
-			System.out.println("재고 관리로 돌아갑니다.");
-		
+			System.out.println("재고 관리로 돌아갑니다.\n");	
 	}
 	
 	public boolean checkBlank(String PayCode)	// 선후 공백 체크
