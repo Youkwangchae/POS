@@ -71,7 +71,12 @@ public class Refund {
 			// 상품 리스트 출력 구문 넣기
 			System.out.print("환불한 상품 코드를 입력해주세요(환불을 멈추고싶다면 완료를  입력해주세요): ");
 			product_code = scan.nextLine();
-			if ((checkL_Product_code(product_code)) & (checkC_Product_code(product_code) & checkBlank(product_code))) {// 상품코드																														// 문법규칙																														// 검사
+			product_code = product_code.toUpperCase();
+			if ((checkL_Product_code(product_code)) & (checkC_Product_code(product_code) & checkBlank(product_code))) {// 상품코드
+																														// //
+																														// 문법규칙
+																														// //
+																														// 검사
 				for (Product i : list) {
 					String ep = i.getEpdate();
 					int day_term = ep_date(ep);
@@ -81,6 +86,7 @@ public class Refund {
 					} else
 						index = -1;
 				}
+				System.out.println(list.get(index));
 				if (index == -1) { // indexOf는 값을 찾지 못했다면 -1을 리턴하기 때문에 예외처리
 					System.out.println("환불 가능리스트에 존재하지 않는 상품코드 입니다.");
 					continue;// 다음 while문으로 진행
@@ -96,6 +102,7 @@ public class Refund {
 								int P_price = list.get(index).getPrice();// 상품 가격 가져오기
 								if (list.get(index).getIsPayByCash()) {// 현금 결제인 경우
 									System.out.println(P_price + "원의 현금 환불을 진행합니다.\n......\n");
+									int count2 = 0;
 									for (int i = 7; i >= 0; i--) {
 										int mok = P_price / cm.getKeyindex(i);
 										if (mok == 0)
@@ -103,38 +110,41 @@ public class Refund {
 										else {
 											P_price -= cm.getKeyindex(i) * mok;
 											if (date.getCash().get(cm.getKeyindex(i)) < mok) {
-												System.out.print("잔돈이 부족합니다." + cm.getKeyindex(i) + "원이 "
-														+ (mok - date.getCash().get(cm.getKeyindex(i)))
-														+ "개 더 필요합니다. 현금 충전을 진행하시겠습니까? : ");
-												String a = scan.next();
-												setIsCashCharge(a);
-												if (isCashCharge.equals("Y")) {
-													cm.ManageCash();
-												} else if (isCashCharge.equals("N")) {
-													System.out.println("상품 코드 입력 부분으로 넘어갑니다.");
-													break;
-												} else {
-													System.out.println("올바르지 않은 입력입니다.");
+												while (true) {
+													System.out.print("잔돈이 부족합니다." + cm.getKeyindex(i) + "원이 "
+															+ (mok - date.getCash().get(cm.getKeyindex(i)))
+															+ "개 더 필요합니다. 현금 충전을 진행하시겠습니까? : ");
+													String a = scan.nextLine();
+													setIsCashCharge(a);
+													if (isCashCharge.equals("Y")) {
+														cm.ManageCash();
+														break;
+													} else if (isCashCharge.equals("N")) {
+														System.out.println("상품 코드 입력 부분으로 넘어갑니다.");
+														count2=1;
+														break;
+													} else {
+														System.out.println("올바르지 않은 입력입니다.");
+													}
 												}
 											} else {
 												setIsCashCharge("Y");
 												date.setCash(cm.getKeyindex(i), mok, true);
 											}
-										}
-
+										}if(count2!=0)
+											break;
 									}
 								} else // 카드 결제인 경우
 									System.out.println(P_price + "원의 카드 환불을 진행합니다\n....\n");
 								if (isCashCharge.equals("Y") && YN.equals("Y") && (P_price == 0)) {
+									date.addProduct(list.get(index));
 									list.remove(index);
 									date.removePayment(PayCode, product_code);
 									System.out.println("환불이 완료됐습니다");
 								}
-								count = 1;
 								break;
 							}
-						}
-						else {
+						} else {
 							System.out.println("환불여부질문으로 되돌아갑니다.");
 							continue;
 						}
