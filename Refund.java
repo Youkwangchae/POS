@@ -17,7 +17,8 @@ public class Refund {
 	private HashMap<String, ArrayList<Product>> Product_list; // 앞에는 상품코드, 뒤에는 상품코드 포함한 상품 정보들
 	private ArrayList<Product> list;
 	private CashManager cm;
-	String isCashCharge; // 현금충전 여부 체크하기 위한 변수
+	private ScreenClear sc;
+	private String isCashCharge; // 현금충전 여부 체크하기 위한 변수
 
 	public Refund(Db date) {
 		this.scan = new Scanner(System.in);
@@ -86,7 +87,6 @@ public class Refund {
 					} else
 						index = -1;
 				}
-				System.out.println(list.get(index));
 				if (index == -1) { // indexOf는 값을 찾지 못했다면 -1을 리턴하기 때문에 예외처리
 					System.out.println("환불 가능리스트에 존재하지 않는 상품코드 입니다.");
 					continue;// 다음 while문으로 진행
@@ -140,6 +140,7 @@ public class Refund {
 									date.addProduct(list.get(index));
 									list.remove(index);
 									date.removePayment(PayCode, product_code);
+									sc=new ScreenClear();
 									System.out.println("환불이 완료됐습니다");
 								}
 								break;
