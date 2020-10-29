@@ -7,9 +7,10 @@ public class InventoryManager {
 	
 	Scanner scan = new Scanner(System.in);
 	ScreenClear sc = new ScreenClear();
-	int menu;
-	public InventoryManager() throws InterruptedException, IOException	//생성자
+	String menu;
+	public InventoryManager(Db db) throws InterruptedException, IOException	//생성자
 	{
+		Refund re = new Refund(db);
 		do
 		{	
 			System.out.println("1. 상품등록");
@@ -17,29 +18,38 @@ public class InventoryManager {
 			System.out.println("3. 폐기등록");
 			System.out.println("4. 종료\n");
 			System.out.print("메뉴 선택: ");
-			menu = scan.nextInt();
+			menu = scan.nextLine();
+			
+			while( !re.checkBlank(menu) || menu.matches(".*[^0-9]+.*") || (menu.length() > 1) )	//명령어 예외처리
+			{
+				if(re.checkBlank(menu)) 
+					System.out.print("잘못된 입력, 다시 입력해주세요(ONLY 숫자, 1글자): ");
+				else
+					System.out.print("다시 입력해주세요: ");
+				menu = scan.nextLine();
+			}
 			
 			switch(menu)	//입력받은 명령어에 따른 동작
 			{
-			case 1:			//1. 상품등록
+			case "1":			//1. 상품등록
 				sc.ScreenClear();
-				ProductRegister pr = new ProductRegister();
+				ProductRegister pr = new ProductRegister(db);
 				break;
-			case 2:			//2. 재고추가
+			case "2":			//2. 재고추가
 				sc.ScreenClear();
-				AddInventory ai = new AddInventory();
+				AddInventory ai = new AddInventory(db);
 				break;
-			case 3:			//3. 폐기등록
+			case "3":			//3. 폐기등록
 				sc.ScreenClear();
-				DisposalRegister dr = new DisposalRegister();
+				DisposalRegister dr = new DisposalRegister(db);
 				break;
-			case 4:			//4. 종료
+			case "4":			//4. 종료
 				System.out.println("재고관리을 종료합니다.");
 				break;		
 			default:		//잘못된 명령어인  경우
 				System.out.println("명령어가 옳지 않습니다.\n");
 			}
-		}while(menu != 4);
+		}while(!menu.equals("4"));
 	}
 	
 }
