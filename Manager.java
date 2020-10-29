@@ -33,9 +33,9 @@ public class Manager {
 		{
 			last_date = db.getLast_date();
 			if(isPossible(date, 2))//이전 날짜인지 확인.
-			{
+			{	
 				db.setLast_date(date);//올바른 날짜임을 확인했으니 Date.txt에 넣고, 메인메뉴로 들어옴.
-				m_date=last_date.substring(0,4)+"_"+last_date.substring(4,6)+"_"+last_date.substring(6);
+				m_date=date.substring(0,4)+"_"+date.substring(4,6)+"_"+date.substring(6);
 				start();//메인 메뉴 보여주기.
 			}
 		}

@@ -35,6 +35,7 @@ public class CashManager {
 		}
 		while(!money.matches("[1-8]|완료"));
 		if(money.equals("완료")) {
+			System.out.println("메인 메뉴로 돌아갑니다.");
 			con = false;
 		}	
 		else {
@@ -49,6 +50,7 @@ public class CashManager {
 						System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
 					System.out.print("총 몇 개의 지폐를 추가하실 건가요 ? : ");
 					insert=scan.nextLine();
+					num++;
 				}while(!insert.matches("[1-9][0-9]|[1-9]"));
 				System.out.println("정말 이렇게 추가하실 건가요? (Y 또는 N 입력)");
 				String ans = "";
