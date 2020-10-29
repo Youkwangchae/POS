@@ -73,11 +73,12 @@ public class AddInventory {
 		System.out.print("추가할 개수를 입력해주세요: ");
 		String temp = scan.nextLine();
 		
-		while( !checkBlank(temp) || temp.matches(".*[^0-9]+.*") || (temp.length() > 3) )	//추가 개수 예외처리
+		while( !checkBlank(temp) || temp.matches(".*[^0-9]+.*") || (temp.length() > 3) || temp.substring(0, 1).equals("0"))	//추가 개수 예외처리
 		{
-			System.out.print("잘못된 입력, 다시 입력해주세요(ONLY 숫자, 3글자 이하, 공백제외): ");
+			System.out.print("잘못된 입력, 다시 입력해주세요(ONLY 숫자, 3글자 이하, 공백제외, 선행 0 비허용): ");
 			temp = scan.nextLine();
 		}	
+		
 		procount = Integer.parseInt(temp);
 		if(procount > 676)					//676이상이면 676개만 저장
 			procount = 676;
@@ -90,7 +91,7 @@ public class AddInventory {
 			db.addProduct(new Product(procode, proname, ep_date, price));
 			db.addNames(proname);
 		}
-		
+		System.out.println("재고 추가가 완료되었습니다.");
 	}
 	
 	public String FindEp_date(String today, int epd_value)			//유통기한 계산 함수
