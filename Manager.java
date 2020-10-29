@@ -31,10 +31,10 @@ public class Manager {
 		
 		else if(isPossible(date))	
 		{
+			last_date = db.getLast_date();
 			if(isPossible(date, 2))//이전 날짜인지 확인.
 			{
 				db.setLast_date(date);//올바른 날짜임을 확인했으니 Date.txt에 넣고, 메인메뉴로 들어옴.
-				last_date = db.getLast_date();
 				m_date=last_date.substring(0,4)+"_"+last_date.substring(4,6)+"_"+last_date.substring(6);
 				start();//메인 메뉴 보여주기.
 			}
@@ -88,12 +88,15 @@ public class Manager {
 		public boolean isPossible(String date, int i) {
 			if(i==8)//같은 날짜.
 				return true;
-			if(date.charAt(i)>date.charAt(i))//이후 날짜.
+			if(date.charAt(i)>last_date.charAt(i))//이후 날짜.
 				return true;
-			else if(date.charAt(i)==date.charAt(i))
+			else if(date.charAt(i)==last_date.charAt(i))
 				return isPossible(date,i+1);
 			else//이전 날짜.
+			{
+				System.out.println("이전의 날짜를 입력하시면 안됩니다. 다시 입력해주세요.");
 				return false;
+			}
 		}
 		
 	public void start() throws InterruptedException, IOException{
