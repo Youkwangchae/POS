@@ -5,20 +5,20 @@ import java.util.HashMap;
 import java.util.ArrayList;
 
 public class Refund {
-	private int index;// È¯ºÒ °¡´ÉÇÑ »óÇ°ÀÇ ÀÎµ¦½º ¹øÈ£¸¦ ¹Ş´Â º¯¼ö
-	private String PayCode;// °áÁ¦ ÄÚµå
-	private String product_code;// »óÇ°ÄÚµå
-	private Scanner scan;// ½ºÄ³³Ê °´Ã¼
-	private int[] days = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }; // À¯Åë±âÇÑ, °áÁ¦ÀÏÀÚ¸¦ °è»êÇÏ±â À§ÇØ¼­ ¸¸µç ¹è¿­
-	private int today_year; // ÇöÀç ³âµµ
-	private int today_month; // ÇöÀç ´Ş
-	private int today_day; // ÇöÀç ÀÏ
-	private Db date;// ÇöÀç³¯Â¥¸¦ °¡Á®¿À±â À§ÇØ ¼±¾ğÇÑ Db°´Ã¼
-	private HashMap<String, ArrayList<Product>> Product_list; // ¾Õ¿¡´Â »óÇ°ÄÚµå, µÚ¿¡´Â »óÇ°ÄÚµå Æ÷ÇÔÇÑ »óÇ° Á¤º¸µé
+	private int index;// í™˜ë¶ˆ ê°€ëŠ¥í•œ ìƒí’ˆì˜ ì¸ë±ìŠ¤ ë²ˆí˜¸ë¥¼ ë°›ëŠ” ë³€ìˆ˜
+	private String PayCode;// ê²°ì œ ì½”ë“œ
+	private String product_code;// ìƒí’ˆì½”ë“œ
+	private Scanner scan;// ìŠ¤ìºë„ˆ ê°ì²´
+	private int[] days = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }; // ìœ í†µê¸°í•œ, ê²°ì œì¼ìë¥¼ ê³„ì‚°í•˜ê¸° ìœ„í•´ì„œ ë§Œë“  ë°°ì—´
+	private int today_year; // í˜„ì¬ ë…„ë„
+	private int today_month; // í˜„ì¬ ë‹¬
+	private int today_day; // í˜„ì¬ ì¼
+	private Db date;// í˜„ì¬ë‚ ì§œë¥¼ ê°€ì ¸ì˜¤ê¸° ìœ„í•´ ì„ ì–¸í•œ Dbê°ì²´
+	private HashMap<String, ArrayList<Product>> Product_list; // ì•ì—ëŠ” ìƒí’ˆì½”ë“œ, ë’¤ì—ëŠ” ìƒí’ˆì½”ë“œ í¬í•¨í•œ ìƒí’ˆ ì •ë³´ë“¤
 	private ArrayList<Product> list;
 	private CashManager cm;
 	private ScreenClear sc;
-	private String isCashCharge; // Çö±İÃæÀü ¿©ºÎ Ã¼Å©ÇÏ±â À§ÇÑ º¯¼ö
+	private String isCashCharge; // í˜„ê¸ˆì¶©ì „ ì—¬ë¶€ ì²´í¬í•˜ê¸° ìœ„í•œ ë³€ìˆ˜
 
 	public Refund(Db date) {
 		this.scan = new Scanner(System.in);
@@ -29,79 +29,79 @@ public class Refund {
 		this.isCashCharge = "N";
 	}
 
-	public void RefundS() { // È¯ºÒ ÁøÇàÇÏ´Â ÇÔ¼ö
+	public void RefundS() { // í™˜ë¶ˆ ì§„í–‰í•˜ëŠ” í•¨ìˆ˜
 
-		do { // ¹®¹ı Çü½Ä¿¡ ¸Â´Â ¹®ÀÚ¿­À» ÀÔ·Â¹ŞÀ»±¸ÀÔ ³¯Â¥ ¶§ ±îÁö ÀÔ·Â¹Ş´Â do-while¹®
-			System.out.print("°áÁ¦ ÄÚµå¸¦ ÀÔ·ÂÇÏ¼¼¿ä: ");
+		do { // ë¬¸ë²• í˜•ì‹ì— ë§ëŠ” ë¬¸ìì—´ì„ ì…ë ¥ë°›ì„êµ¬ì… ë‚ ì§œ ë•Œ ê¹Œì§€ ì…ë ¥ë°›ëŠ” do-whileë¬¸
+			System.out.print("ê²°ì œ ì½”ë“œë¥¼ ì…ë ¥í•˜ì„¸ìš”: ");
 			PayCode = scan.nextLine();
 		} while (!(checkL_PayCode(PayCode) & checkI_PayCode(PayCode) & checkBlank(PayCode) & checkR_PayCode(PayCode)));
 
-		String r_possible_Pd = PayCode.substring(0, 6);// È¯ºÒ °¡´ÉÇÑ ³¯Â¥ÀÎÁö ÆÇ´ÜÀ» À§ÇÑ ÃßÃâ-°áÁ¦ ³¯Â¥
-		int year1 = Integer.parseInt(r_possible_Pd.substring(0, 2));// ±¸¸Å³¯Â¥ ³â µÚ¿¡ µÎÀÚ¸®
-		int month1 = Integer.parseInt(r_possible_Pd.substring(2, 4)); // ±¸¸Å³¯Â¥ ¿ù
-		int day1 = Integer.parseInt(r_possible_Pd.substring(4, 6)); // ±¸¸Å³¯Â¥ ÀÏ
+		String r_possible_Pd = PayCode.substring(0, 6);// í™˜ë¶ˆ ê°€ëŠ¥í•œ ë‚ ì§œì¸ì§€ íŒë‹¨ì„ ìœ„í•œ ì¶”ì¶œ-ê²°ì œ ë‚ ì§œ
+		int year1 = Integer.parseInt(r_possible_Pd.substring(0, 2));// êµ¬ë§¤ë‚ ì§œ ë…„ ë’¤ì— ë‘ìë¦¬
+		int month1 = Integer.parseInt(r_possible_Pd.substring(2, 4)); // êµ¬ë§¤ë‚ ì§œ ì›”
+		int day1 = Integer.parseInt(r_possible_Pd.substring(4, 6)); // êµ¬ë§¤ë‚ ì§œ ì¼
 
-		String today = date.getLast_date();// ÇöÀç ³¯Â¥ °¡Áö°í ¿À±â
-		today_year = Integer.parseInt(today.substring(2, 4));// ÇöÀç³¯Â¥ ³â µÚ¿¡ µÎÀÚ¸®
-		today_month = Integer.parseInt(today.substring(4, 6));// ÇöÀç³¯Â¥ ¿ù
-		today_day = Integer.parseInt(today.substring(6, 8));// ÇöÀç³¯Â¥ ÀÏ
+		String today = date.getLast_date();// í˜„ì¬ ë‚ ì§œ ê°€ì§€ê³  ì˜¤ê¸°
+		today_year = Integer.parseInt(today.substring(2, 4));// í˜„ì¬ë‚ ì§œ ë…„ ë’¤ì— ë‘ìë¦¬
+		today_month = Integer.parseInt(today.substring(4, 6));// í˜„ì¬ë‚ ì§œ ì›”
+		today_day = Integer.parseInt(today.substring(6, 8));// í˜„ì¬ë‚ ì§œ ì¼
 
-		int day_term1 = checkD(year1, month1, day1);// ±¸¸Å³¯Â¥¿Í ÇöÀç ³¯Â¥ Â÷ÀÌ °è»ê
-		if (day_term1 >= 7) {// ¿©±â¼­ ÇöÀç ³¯Â¥¿Í ±¸¸Å³¯Â¥ ºñ±³ 7ÀÏ ³ÑÀ»½Ã È¯ºÒ ºÒ°¡ ÆÇÁ¤ÈÄ ¸ŞÀÎ¸Ş´º·Î º¹±Í
-			System.out.println("±¸ÀÔ ÈÄ ÀÏÁÖÀÏÀÌ Áö³µ±â ¶§¹®¿¡ È¯ºÒÀÌ ºÒ°¡´ÉÇÕ´Ï´Ù.\n¸ŞÀÎ¸Ş´º·Î µ¹¾Æ°©´Ï´Ù.");
-			return; // Á¾·áºĞ±â
+		int day_term1 = checkD(year1, month1, day1);// êµ¬ë§¤ë‚ ì§œì™€ í˜„ì¬ ë‚ ì§œ ì°¨ì´ ê³„ì‚°
+		if (day_term1 >= 7) {// ì—¬ê¸°ì„œ í˜„ì¬ ë‚ ì§œì™€ êµ¬ë§¤ë‚ ì§œ ë¹„êµ 7ì¼ ë„˜ì„ì‹œ í™˜ë¶ˆ ë¶ˆê°€ íŒì •í›„ ë©”ì¸ë©”ë‰´ë¡œ ë³µê·€
+			System.out.println("êµ¬ì… í›„ ì¼ì£¼ì¼ì´ ì§€ë‚¬ê¸° ë•Œë¬¸ì— í™˜ë¶ˆì´ ë¶ˆê°€ëŠ¥í•©ë‹ˆë‹¤.\në©”ì¸ë©”ë‰´ë¡œ ëŒì•„ê°‘ë‹ˆë‹¤.");
+			return; // ì¢…ë£Œë¶„ê¸°
 		}
-		int count = 0;// whileºüÁ®³ª¿À°Ô ÇÏ±â À§ÇØ ¸¸µç º¯¼ö
+		int count = 0;// whileë¹ ì ¸ë‚˜ì˜¤ê²Œ í•˜ê¸° ìœ„í•´ ë§Œë“  ë³€ìˆ˜
 		while (true) {
-			list = Product_list.get(PayCode); // Paycode¸¦ key°ªÀ¸·Î ÇÏ´Â value¸¦ ¹Ş´Â ArrayList<Product>
-			System.out.println("          °áÁ¦ ¸®½ºÆ®            ");
+			list = Product_list.get(PayCode); // Paycodeë¥¼ keyê°’ìœ¼ë¡œ í•˜ëŠ” valueë¥¼ ë°›ëŠ” ArrayList<Product>
+			System.out.println("          ê²°ì œ ë¦¬ìŠ¤íŠ¸            ");
 			System.out.println("-------------------------");
 			for (Product i : list) {
 				System.out.print(i);
 			}
-			System.out.println("      È¯ºÒ °¡´É »óÇ° ¸®½ºÆ®       ");
+			System.out.println("      í™˜ë¶ˆ ê°€ëŠ¥ ìƒí’ˆ ë¦¬ìŠ¤íŠ¸       ");
 			System.out.println("-------------------------");
 
-			for (Product i : list) { // listÀÇ ¸ğµç »óÇ°µéÀ» Ãâ·ÂÇÏ´Â for¹®
-				String ep = i.getEpdate(); // ÇØ´ç »óÇ°ÀÇ À¯Åë±âÇÑÀ» Á¡°ËÇÏ±â À§ÇØ¼­ ProductÀÇ À¯Åë±âÇÑ °ªÀ» °¡Á®¿Í¼­ ÇöÀç ½Ã°£°ú ºñ±³ÇÑ´Ù.
-				int day_term2 = ep_date(ep);// À¯Åë±âÇÑ Ã¼Å©
-				if (day_term2 < 0) {// ¸¸¾à ³¯Â¥ Â÷ÀÌ°¡ 30ÀÏ ¹Ì¸¸ Áï, À¯Åë±âÇÑÀÌ ¾ÆÁ÷ Áö³ªÁö ¾Ê¾Ò´Ù¸é
-					System.out.print(i);// ÇØ´ç»óÇ°Á¤º¸¸¦ Ãâ·Â
+			for (Product i : list) { // listì˜ ëª¨ë“  ìƒí’ˆë“¤ì„ ì¶œë ¥í•˜ëŠ” forë¬¸
+				String ep = i.getEpdate(); // í•´ë‹¹ ìƒí’ˆì˜ ìœ í†µê¸°í•œì„ ì ê²€í•˜ê¸° ìœ„í•´ì„œ Productì˜ ìœ í†µê¸°í•œ ê°’ì„ ê°€ì ¸ì™€ì„œ í˜„ì¬ ì‹œê°„ê³¼ ë¹„êµí•œë‹¤.
+				int day_term2 = ep_date(ep);// ìœ í†µê¸°í•œ ì²´í¬
+				if (day_term2 < 0) {// ë§Œì•½ ë‚ ì§œ ì°¨ì´ê°€ 30ì¼ ë¯¸ë§Œ ì¦‰, ìœ í†µê¸°í•œì´ ì•„ì§ ì§€ë‚˜ì§€ ì•Šì•˜ë‹¤ë©´
+					System.out.print(i);// í•´ë‹¹ìƒí’ˆì •ë³´ë¥¼ ì¶œë ¥
 				}
 			}
-			// »óÇ° ¸®½ºÆ® Ãâ·Â ±¸¹® ³Ö±â
-			System.out.print("È¯ºÒÇÑ »óÇ° ÄÚµå¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä(È¯ºÒÀ» ¸ØÃß°í½Í´Ù¸é ¿Ï·á¸¦  ÀÔ·ÂÇØÁÖ¼¼¿ä): ");
+			// ìƒí’ˆ ë¦¬ìŠ¤íŠ¸ ì¶œë ¥ êµ¬ë¬¸ ë„£ê¸°
+			System.out.print("í™˜ë¶ˆí•œ ìƒí’ˆ ì½”ë“œë¥¼ ì…ë ¥í•´ì£¼ì„¸ìš”(í™˜ë¶ˆì„ ë©ˆì¶”ê³ ì‹¶ë‹¤ë©´ ì™„ë£Œë¥¼  ì…ë ¥í•´ì£¼ì„¸ìš”): ");
 			product_code = scan.nextLine();
 			product_code = product_code.toUpperCase();
-			if ((checkL_Product_code(product_code)) & (checkC_Product_code(product_code) & checkBlank(product_code))) {// »óÇ°ÄÚµå
+			if ((checkL_Product_code(product_code)) & (checkC_Product_code(product_code) & checkBlank(product_code))) {// ìƒí’ˆì½”ë“œ
 																														// //
-																														// ¹®¹ı±ÔÄ¢
+																														// ë¬¸ë²•ê·œì¹™
 																														// //
-																														// °Ë»ç
+																														// ê²€ì‚¬
 				for (Product i : list) {
 					String ep = i.getEpdate();
 					int day_term = ep_date(ep);
-					if ((i.getCode().equals(product_code)) & (day_term < 0)) {// »óÇ°ÄÚµå¿Í ÀÏÄ¡ÇÏ´Â »óÇ°ÀÇ ÀÎµ¦½º ¹øÈ£ Ã£±â
-						index = list.indexOf(i);// ÀÏÄ¡ÇÑ´Ù¸é, ÇØ´ç »óÇ°ÀÇ ÀÎµ¦½º¸¦ À§¿¡¼­ ¼±¾ğÇß´ø index¿¡ È£ÃâÇÑ´Ù
+					if ((i.getCode().equals(product_code)) & (day_term < 0)) {// ìƒí’ˆì½”ë“œì™€ ì¼ì¹˜í•˜ëŠ” ìƒí’ˆì˜ ì¸ë±ìŠ¤ ë²ˆí˜¸ ì°¾ê¸°
+						index = list.indexOf(i);// ì¼ì¹˜í•œë‹¤ë©´, í•´ë‹¹ ìƒí’ˆì˜ ì¸ë±ìŠ¤ë¥¼ ìœ„ì—ì„œ ì„ ì–¸í–ˆë˜ indexì— í˜¸ì¶œí•œë‹¤
 						break;
 					} else
 						index = -1;
 				}
-				if (index == -1) { // indexOf´Â °ªÀ» Ã£Áö ¸øÇß´Ù¸é -1À» ¸®ÅÏÇÏ±â ¶§¹®¿¡ ¿¹¿ÜÃ³¸®
-					System.out.println("È¯ºÒ °¡´É¸®½ºÆ®¿¡ Á¸ÀçÇÏÁö ¾Ê´Â »óÇ°ÄÚµå ÀÔ´Ï´Ù.");
-					continue;// ´ÙÀ½ while¹®À¸·Î ÁøÇà
+				if (index == -1) { // indexOfëŠ” ê°’ì„ ì°¾ì§€ ëª»í–ˆë‹¤ë©´ -1ì„ ë¦¬í„´í•˜ê¸° ë•Œë¬¸ì— ì˜ˆì™¸ì²˜ë¦¬
+					System.out.println("í™˜ë¶ˆ ê°€ëŠ¥ë¦¬ìŠ¤íŠ¸ì— ì¡´ì¬í•˜ì§€ ì•ŠëŠ” ìƒí’ˆì½”ë“œ ì…ë‹ˆë‹¤.");
+					continue;// ë‹¤ìŒ whileë¬¸ìœ¼ë¡œ ì§„í–‰
 				} else {
 					while (true) {
-						System.out.print(list.get(index).getName() + "À»(¸¦) È¯ºÒÇÏ½Ã°Ú½À´Ï±î?(Y/N): ");
-						String YN = scan.nextLine(); // È¯ºÒ¿©ºÎ YNÀ¸·Î ÀçÂ÷ ¹¯±â
+						System.out.print(list.get(index).getName() + "ì„(ë¥¼) í™˜ë¶ˆí•˜ì‹œê² ìŠµë‹ˆê¹Œ?(Y/N): ");
+						String YN = scan.nextLine(); // í™˜ë¶ˆì—¬ë¶€ YNìœ¼ë¡œ ì¬ì°¨ ë¬»ê¸°
 						if ((checkL_YN(YN)) & (checkC_YN(YN)) & (checkBlank(YN))) {
 							if (YN.equals("N")) {
-								System.out.println("»óÇ°ÄÚµå ÀÔ·ÂÀ¸·Î ³Ñ¾î°©´Ï´Ù.");
+								System.out.println("ìƒí’ˆì½”ë“œ ì…ë ¥ìœ¼ë¡œ ë„˜ì–´ê°‘ë‹ˆë‹¤.");
 								break;
-							} else {// ÇØ´ç // °áÁ¦¸ñ·Ï¿¡¼­ // °áÁ¦ÇÑ // »óÇ° »èÁ¦
-								int P_price = list.get(index).getPrice();// »óÇ° °¡°İ °¡Á®¿À±â
-								if (list.get(index).getIsPayByCash()) {// Çö±İ °áÁ¦ÀÎ °æ¿ì
-									System.out.println(P_price + "¿øÀÇ Çö±İ È¯ºÒÀ» ÁøÇàÇÕ´Ï´Ù.\n......\n");
+							} else {// í•´ë‹¹ // ê²°ì œëª©ë¡ì—ì„œ // ê²°ì œí•œ // ìƒí’ˆ ì‚­ì œ
+								int P_price = list.get(index).getPrice();// ìƒí’ˆ ê°€ê²© ê°€ì ¸ì˜¤ê¸°
+								if (list.get(index).getIsPayByCash()) {// í˜„ê¸ˆ ê²°ì œì¸ ê²½ìš°
+									System.out.println(P_price + "ì›ì˜ í˜„ê¸ˆ í™˜ë¶ˆì„ ì§„í–‰í•©ë‹ˆë‹¤.\n......\n");
 									int count2 = 0;
 									for (int i = 7; i >= 0; i--) {
 										int mok = P_price / cm.getKeyindex(i);
@@ -111,20 +111,20 @@ public class Refund {
 											P_price -= cm.getKeyindex(i) * mok;
 											if (date.getCash().get(cm.getKeyindex(i)) < mok) {
 												while (true) {
-													System.out.print("ÀÜµ·ÀÌ ºÎÁ·ÇÕ´Ï´Ù." + cm.getKeyindex(i) + "¿øÀÌ "
+													System.out.print("ì”ëˆì´ ë¶€ì¡±í•©ë‹ˆë‹¤." + cm.getKeyindex(i) + "ì›ì´ "
 															+ (mok - date.getCash().get(cm.getKeyindex(i)))
-															+ "°³ ´õ ÇÊ¿äÇÕ´Ï´Ù. Çö±İ ÃæÀüÀ» ÁøÇàÇÏ½Ã°Ú½À´Ï±î? : ");
+															+ "ê°œ ë” í•„ìš”í•©ë‹ˆë‹¤. í˜„ê¸ˆ ì¶©ì „ì„ ì§„í–‰í•˜ì‹œê² ìŠµë‹ˆê¹Œ? : ");
 													String a = scan.nextLine();
 													setIsCashCharge(a);
 													if (isCashCharge.equals("Y")) {
-														cm.ManageCash();
+														cm.ManageCash(true);
 														break;
 													} else if (isCashCharge.equals("N")) {
-														System.out.println("»óÇ° ÄÚµå ÀÔ·Â ºÎºĞÀ¸·Î ³Ñ¾î°©´Ï´Ù.");
+														System.out.println("ìƒí’ˆ ì½”ë“œ ì…ë ¥ ë¶€ë¶„ìœ¼ë¡œ ë„˜ì–´ê°‘ë‹ˆë‹¤.");
 														count2=1;
 														break;
 													} else {
-														System.out.println("¿Ã¹Ù¸£Áö ¾ÊÀº ÀÔ·ÂÀÔ´Ï´Ù.");
+														System.out.println("ì˜¬ë°”ë¥´ì§€ ì•Šì€ ì…ë ¥ì…ë‹ˆë‹¤.");
 													}
 												}
 											} else {
@@ -134,26 +134,26 @@ public class Refund {
 										}if(count2!=0)
 											break;
 									}
-								} else // Ä«µå °áÁ¦ÀÎ °æ¿ì
-									System.out.println(P_price + "¿øÀÇ Ä«µå È¯ºÒÀ» ÁøÇàÇÕ´Ï´Ù\n....\n");
+								} else // ì¹´ë“œ ê²°ì œì¸ ê²½ìš°
+									System.out.println(P_price + "ì›ì˜ ì¹´ë“œ í™˜ë¶ˆì„ ì§„í–‰í•©ë‹ˆë‹¤\n....\n");
 								if (isCashCharge.equals("Y") && YN.equals("Y") && (P_price == 0)) {
 									date.addProduct(list.get(index));
 									list.remove(index);
 									date.removePayment(PayCode, product_code);
 									sc=new ScreenClear();
-									System.out.println("È¯ºÒÀÌ ¿Ï·áµÆ½À´Ï´Ù");
+									System.out.println("í™˜ë¶ˆì´ ì™„ë£ŒëìŠµë‹ˆë‹¤");
 								}
 								break;
 							}
 						} else {
-							System.out.println("È¯ºÒ¿©ºÎÁú¹®À¸·Î µÇµ¹¾Æ°©´Ï´Ù.");
+							System.out.println("í™˜ë¶ˆì—¬ë¶€ì§ˆë¬¸ìœ¼ë¡œ ë˜ëŒì•„ê°‘ë‹ˆë‹¤.");
 							continue;
 						}
 					}
 				}
-			} else if (product_code.equals("¿Ï·á")) {
-				System.out.println("¿Ï·á¸¦ ÀÔ·ÂÇß½À´Ï´Ù. ¸ŞÀÎ¸Ş´º·Î µ¹¾Æ°©´Ï´Ù.");
-				return;// Á¾·á ºĞ±â
+			} else if (product_code.equals("ì™„ë£Œ")) {
+				System.out.println("ì™„ë£Œë¥¼ ì…ë ¥í–ˆìŠµë‹ˆë‹¤. ë©”ì¸ë©”ë‰´ë¡œ ëŒì•„ê°‘ë‹ˆë‹¤.");
+				return;// ì¢…ë£Œ ë¶„ê¸°
 			} else {
 				continue;
 			}
@@ -168,15 +168,15 @@ public class Refund {
 		this.isCashCharge = isCashCharge;
 	}
 
-	public int checkD(int year, int month, int day) {// ³¯Â¥ Â÷ÀÌ °è»êÇÏ´Â ÇÔ¼ö
-		int day_term = (today_year - year) * 365;// ÇöÀç ³¯Â¥¿Í ÀÔ·Â¹ŞÀº ³âµµ °è»ê
-		for (int i = 1; i <= today_month; i++) { // ÇöÀç ³¯Â¥±îÁö ÀÏ ¼ö ´õÇÏ±â
+	public int checkD(int year, int month, int day) {// ë‚ ì§œ ì°¨ì´ ê³„ì‚°í•˜ëŠ” í•¨ìˆ˜
+		int day_term = (today_year - year) * 365;// í˜„ì¬ ë‚ ì§œì™€ ì…ë ¥ë°›ì€ ë…„ë„ ê³„ì‚°
+		for (int i = 1; i <= today_month; i++) { // í˜„ì¬ ë‚ ì§œê¹Œì§€ ì¼ ìˆ˜ ë”í•˜ê¸°
 			if (i == today_month)
 				day_term += today_day;
 			else
 				day_term += days[i - 1];
 		}
-		for (int i = 1; i <= month; i++) {// ÀÔ·Â¹ŞÀº ³¯Â¥ ÀÏ ¼ö ±îÁö »©±â
+		for (int i = 1; i <= month; i++) {// ì…ë ¥ë°›ì€ ë‚ ì§œ ì¼ ìˆ˜ ê¹Œì§€ ë¹¼ê¸°
 			if (i == month)
 				day_term -= (day - 1);
 			else
@@ -185,83 +185,83 @@ public class Refund {
 		return day_term;
 	}
 
-	public boolean checkL_PayCode(String PayCode) {// ±æÀÌ Ã¼Å©ÇÏ´Â ÇÔ¼ö
+	public boolean checkL_PayCode(String PayCode) {// ê¸¸ì´ ì²´í¬í•˜ëŠ” í•¨ìˆ˜
 		if (PayCode.length() == 9)
 			return true;
 		else if (PayCode.length() > 9) {
-			System.out.println("Àß¸øµÈ ÀÔ·Â ÀÔ´Ï´Ù-±æÀÌ°¡ 9 ÃÊ°úÀÔ´Ï´Ù");
+			System.out.println("ì˜ëª»ëœ ì…ë ¥ ì…ë‹ˆë‹¤-ê¸¸ì´ê°€ 9 ì´ˆê³¼ì…ë‹ˆë‹¤");
 			return false;
 		} else {
-			System.out.println("Àß¸øµÈ ÀÔ·ÂÀÔ´Ï´Ù-±æÀÌ°¡ 9 ¹Ì¸¸ÀÔ´Ï´Ù.");
+			System.out.println("ì˜ëª»ëœ ì…ë ¥ì…ë‹ˆë‹¤-ê¸¸ì´ê°€ 9 ë¯¸ë§Œì…ë‹ˆë‹¤.");
 			return false;
 		}
 	}
 
-	public boolean checkI_PayCode(String PayCode) {// ¼ıÀÚÀÎÁö Ã¼Å©ÇÏ´Â ÇÔ¼ö
+	public boolean checkI_PayCode(String PayCode) {// ìˆ«ìì¸ì§€ ì²´í¬í•˜ëŠ” í•¨ìˆ˜
 		for (char c : PayCode.toCharArray()) {
 			if ((c >= 48) && (c <= 57)) {
 				continue;
 			} else {
-				System.out.println("Àß¸øµÈ ÀÔ·Â ÀÔ´Ï´Ù-¼ıÀÚ°¡ ¾Æ´Ñ°Ô µé¾îÀÖ½À´Ï´Ù");
+				System.out.println("ì˜ëª»ëœ ì…ë ¥ ì…ë‹ˆë‹¤-ìˆ«ìê°€ ì•„ë‹Œê²Œ ë“¤ì–´ìˆìŠµë‹ˆë‹¤");
 				return false;
 			}
 		}
 		return true;
 	}
 
-	public boolean checkBlank(String PayCode) {// ¼±ÈÄ °ø¹é Ã¼Å©
+	public boolean checkBlank(String PayCode) {// ì„ í›„ ê³µë°± ì²´í¬
 		String B_PayCode=PayCode.replaceAll("\\s+", "");
 		if(B_PayCode.equals(PayCode)) {
 			return true;
 		}
-		System.out.println("Àß¸øµÈ ÀÔ·Â ÀÔ´Ï´Ù-°ø¹éÀÌ µé¾îÀÖ½À´Ï´Ù");
+		System.out.println("ì˜ëª»ëœ ì…ë ¥ ì…ë‹ˆë‹¤-ê³µë°±ì´ ë“¤ì–´ìˆìŠµë‹ˆë‹¤");
 		return false;
 	}
 
-	public boolean checkR_PayCode(String PayCode) { // ½ÇÁ¦·Î Á¸ÀçÇÏ´Â °áÁ¦ÄÚµåÀÎÁö Ã¼Å©
+	public boolean checkR_PayCode(String PayCode) { // ì‹¤ì œë¡œ ì¡´ì¬í•˜ëŠ” ê²°ì œì½”ë“œì¸ì§€ ì²´í¬
 		String NonBPC = new String(PayCode);
-		NonBPC = NonBPC.replaceAll("\\s+", "");// ½ÇÁ¦ Ã¼Å©¸¦ À§ÇØ¼­ °ø¹é Ã¼Å©
+		NonBPC = NonBPC.replaceAll("\\s+", "");// ì‹¤ì œ ì²´í¬ë¥¼ ìœ„í•´ì„œ ê³µë°± ì²´í¬
 		for (String key : Product_list.keySet()) {
 			if (key.equals(NonBPC))
 				return true;
 		}
-		System.out.println("Àß¸øµÈ ÀÔ·ÂÀÔ´Ï´Ù-Á¸ÀçÇÏÁö ¾Ê´Â °áÁ¦ÄÚµå ÀÔ´Ï´Ù.");
+		System.out.println("ì˜ëª»ëœ ì…ë ¥ì…ë‹ˆë‹¤-ì¡´ì¬í•˜ì§€ ì•ŠëŠ” ê²°ì œì½”ë“œ ì…ë‹ˆë‹¤.");
 		return false;
 	}
 
-	public boolean checkL_Product_code(String Pc) {// »óÇ°ÄÚµå ¹®¹ı±ÔÄ¢ ÆÇº°-±æÀÌ°¡ 6ÀÎÁö
-		if (Pc.equals("¿Ï·á"))
+	public boolean checkL_Product_code(String Pc) {// ìƒí’ˆì½”ë“œ ë¬¸ë²•ê·œì¹™ íŒë³„-ê¸¸ì´ê°€ 6ì¸ì§€
+		if (Pc.equals("ì™„ë£Œ"))
 			return false;
 		if (Pc.length() == 6)
 			return true;
 		else if (Pc.length() > 6) {
-			System.out.println("¿ÃÀß¸øµÈ ÀÔ·ÂÀÔ´Ï´Ù-±æÀÌ°¡ 6 ÃÊ°úÀÔ´Ï´Ù");
+			System.out.println("ì˜¬ì˜ëª»ëœ ì…ë ¥ì…ë‹ˆë‹¤-ê¸¸ì´ê°€ 6 ì´ˆê³¼ì…ë‹ˆë‹¤");
 			return false;
 		} else {
-			System.out.println("Àß¸øµÈ ÀÔ·ÂÀÔ´Ï´Ù-±æÀÌ°¡ 6 ¹Ì¸¸ÀÔ´Ï´Ù");
+			System.out.println("ì˜ëª»ëœ ì…ë ¥ì…ë‹ˆë‹¤-ê¸¸ì´ê°€ 6 ë¯¸ë§Œì…ë‹ˆë‹¤");
 			return false;
 		}
 	}
 
-	public boolean checkC_Product_code(String Pc) {// »óÇ°ÄÚµå ¹®¹ı±ÔÄ¢ ÆÇº°ÇÏ´Â ÇÔ¼ö -¾ËÆÄºª´ë¹®ÀÚ·Î ÀÌ·ç¾îÁ® ÀÖ´ÂÁö
-		if (Pc.equals("¿Ï·á"))
+	public boolean checkC_Product_code(String Pc) {// ìƒí’ˆì½”ë“œ ë¬¸ë²•ê·œì¹™ íŒë³„í•˜ëŠ” í•¨ìˆ˜ -ì•ŒíŒŒë²³ëŒ€ë¬¸ìë¡œ ì´ë£¨ì–´ì ¸ ìˆëŠ”ì§€
+		if (Pc.equals("ì™„ë£Œ"))
 			return false;
 		for (char c : Pc.toCharArray()) {
 			if ((c >= 65) && (c <= 90))
 				continue;
 			else {
-				System.out.println("Àß¸øµÈ ÀÔ·ÂÀÔ´Ï´Ù-´ë¹®ÀÚ ¾ËÆÄºªÀÌ ¾Æ´Ñ°Ô µé¾îÀÖ½À´Ï´Ù");
+				System.out.println("ì˜ëª»ëœ ì…ë ¥ì…ë‹ˆë‹¤-ëŒ€ë¬¸ì ì•ŒíŒŒë²³ì´ ì•„ë‹Œê²Œ ë“¤ì–´ìˆìŠµë‹ˆë‹¤");
 				return false;
 			}
 		}
 		return true;
 	}
 
-	public int ep_date(String ep) {// À¯Åë±âÇÑ °æ°ú³¯Â¥ Ã¼Å©
-		int year2 = Integer.parseInt(ep.substring(2, 4));// À¯Åë±âÇÑ ³âµµ
-		int month2 = Integer.parseInt(ep.substring(4, 6));// À¯Åë±âÇÑ ¿ù
-		int day2 = Integer.parseInt(ep.substring(6, 8));// À¯Åë±âÇÑ ÀÏ
-		int epdate = checkD(year2, month2, day2);// À¯Åë±âÇÑ Ã¼Å©
+	public int ep_date(String ep) {// ìœ í†µê¸°í•œ ê²½ê³¼ë‚ ì§œ ì²´í¬
+		int year2 = Integer.parseInt(ep.substring(2, 4));// ìœ í†µê¸°í•œ ë…„ë„
+		int month2 = Integer.parseInt(ep.substring(4, 6));// ìœ í†µê¸°í•œ ì›”
+		int day2 = Integer.parseInt(ep.substring(6, 8));// ìœ í†µê¸°í•œ ì¼
+		int epdate = checkD(year2, month2, day2);// ìœ í†µê¸°í•œ ì²´í¬
 		return epdate;
 	}
 
@@ -270,9 +270,9 @@ public class Refund {
 			return true;
 		}
 		if (YN.length() > 1)
-			System.out.println("Àß¸øµÈ ÀÔ·Â ÀÔ´Ï´Ù-±æÀÌ°¡ 1 ÃÊ°úÀÔ´Ï´Ù");
+			System.out.println("ì˜ëª»ëœ ì…ë ¥ ì…ë‹ˆë‹¤-ê¸¸ì´ê°€ 1 ì´ˆê³¼ì…ë‹ˆë‹¤");
 		else
-			System.out.println("Àß¸øµÈ ÀÔ·Â ÀÔ´Ï´Ù-±æÀÌ°¡ 1 ¹Ì¸¸ÀÔ´Ï´Ù");
+			System.out.println("ì˜ëª»ëœ ì…ë ¥ ì…ë‹ˆë‹¤-ê¸¸ì´ê°€ 1 ë¯¸ë§Œì…ë‹ˆë‹¤");
 		return false;
 	}
 
@@ -281,7 +281,7 @@ public class Refund {
 			if ((c == 78) || (c == 89)) {
 				continue;
 			} else {
-				System.out.println("Àß¸øµÈ ÀÔ·ÂÀÔ´Ï´Ù-YN¿Ü¿¡ ´Ù¸¥ ¹®ÀÚ°¡ ÀÖ½À´Ï´Ù");
+				System.out.println("ì˜ëª»ëœ ì…ë ¥ì…ë‹ˆë‹¤-YNì™¸ì— ë‹¤ë¥¸ ë¬¸ìê°€ ìˆìŠµë‹ˆë‹¤");
 				return false;
 			}
 		}
