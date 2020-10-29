@@ -19,7 +19,7 @@ public class InventoryManager {
 			System.out.print("메뉴 선택: ");
 			menu = scan.nextLine();
 			
-			while( !checkBlank(menu) || menu.matches(".*[^1-4]+.*") || (menu.length() > 1) )	//명령어 예외처리
+			while( !checkBlank(menu) || menu.matches(".*[^1-4]+.*") || (menu.length() != 1) )	//명령어 예외처리
 			{
 				System.out.print("잘못된 입력, 다시 입력해주세요(ONLY 숫자, 1글자, 공백제외): ");
 				menu = scan.nextLine();
