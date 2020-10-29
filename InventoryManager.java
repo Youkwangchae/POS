@@ -45,7 +45,7 @@ public class InventoryManager {
 			default:		//잘못된 명령어인  경우
 				System.out.println("명령어가 옳지 않습니다.\n");
 			}
-		}while(menu != "4");
+		}while(menu.equals("4"));
 	}
 	
 }
