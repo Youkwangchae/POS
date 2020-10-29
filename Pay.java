@@ -42,7 +42,7 @@ public class Pay {
 					break;
 				}
 				else {
-					System.out.println("잘못된 입력입니다. (상품코드가 올바르지 않음)");
+					System.out.println("상품코드를 입력해주셔야 합니다.");
 					continue;
 				}
 			}
@@ -213,6 +213,16 @@ public class Pay {
 				}
 				
 				int num = Integer.parseInt(answer);
+				if(answer.substring(0, 1).equals("0")) {
+					System.out.println("잘못된 입력입니다. -선행 0은 허용하지 않습니다.");
+					continue;
+				}
+				
+				if(num == 0) {
+					System.out.println("잘못된 입력입니다. -0은 허용하지 않습니다.");
+					continue;
+				}
+				
 				
 				int total = getTotalPay();
 				if(num < total) {
