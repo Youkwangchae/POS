@@ -34,7 +34,7 @@ public class Pay {
 		
 		while(true) {
 			printProducts();
-			System.out.print("상품코드를 입력해주세요(마치려면 완료):");
+			System.out.print("상품코드를 입력해주세요(마치려면 완료, 기능을 종료하려면 종료):");
 			answer = sc.nextLine();
 			if(answer.equals("완료")) {
 				if(!products_payment.isEmpty()) {
@@ -45,6 +45,10 @@ public class Pay {
 					System.out.println("상품코드를 입력해주셔야 합니다.");
 					continue;
 				}
+			}
+			
+			if(answer.equals("종료")) {
+				return;
 			}
 			
 			if(!checkBlank(answer)) {
@@ -112,11 +116,8 @@ public class Pay {
 		String answer;
 		while(true) {
 			try {
-				
 				System.out.print("결제수단을 선택해주세요(1.현금, 2.카드)");
 				answer = sc.nextLine();
-				
-				
 				if(answer.equals("1")) {
 					purchase(1);
 					break;
@@ -374,12 +375,12 @@ public class Pay {
 		int total = 0;
 		while(it.hasNext()) {
 			key = it.next();
-			String date = "20"+it.next().substring(0,6);
+			String date = "20"+key.substring(0,6);
 			if(date.equals(this.date)) {
 				total++;
 			}
 		}
-		//System.out.println(total);
+		
 		return total;
 		
 	}
