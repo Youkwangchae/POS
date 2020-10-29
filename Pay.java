@@ -229,21 +229,24 @@ public class Pay {
 					System.out.println("받은 금액이 부족합니다. 다시 입력해주세요.");
 					continue;
 				}
-				total-=num;
+				
+				num-=total;
 				boolean flag = false;
+				
+				
 				for(int j = 0; j < money_type.length; j++) {
 					int m = money_type[j];
 					charge.put(m, 0);
 					for(int i = 0; i < cash.get(m); i++) {
-						if(total / m > 0) {
+						if(num / m > 0) {
 							charge.put(m, charge.get(m)+1);
-							total -= m;
+							num -= m;
 						}
 						else {
 							break;
 						}
 					}
-					if(total == 0) {
+					if(num == 0) {
 						flag = true;
 						break;
 					}
@@ -263,7 +266,7 @@ public class Pay {
 				else {
 					System.out.println("현금이 부족합니다.");	//현금충전 프롬프트로 넘어가기(아직 미완)
 					CashManager cm = new CashManager(db);
-					cm.ManageCash();
+					cm.ManageCash(true);
 				}
 			}
 			catch(InputMismatchException E) {
