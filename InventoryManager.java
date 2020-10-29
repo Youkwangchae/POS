@@ -20,10 +20,12 @@ public class InventoryManager {
 			System.out.print("메뉴 선택: ");
 			menu = scan.nextLine();
 			
-			while( ( !menu.matches(".*[0-9]+.*")) || (menu.length() > 1) )	//명령어 예외처리
+			while( !re.checkBlank(menu) ||( !menu.matches(".*[0-9]+.*")) || (menu.length() > 1) )	//명령어 예외처리
 			{
 				if(re.checkBlank(menu)) 
 					System.out.print("잘못된 입력, 다시 입력해주세요(ONLY 숫자, 1글자): ");
+				else
+					System.out.print("다시 입력해주세요: ");
 				menu = scan.nextLine();
 			}
 			
