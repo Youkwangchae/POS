@@ -10,7 +10,6 @@ public class InventoryManager {
 	String menu;
 	public InventoryManager(Db db) throws InterruptedException, IOException	//생성자
 	{
-		Refund re = new Refund(db);
 		do
 		{	
 			System.out.println("1. 상품등록");
@@ -20,12 +19,9 @@ public class InventoryManager {
 			System.out.print("메뉴 선택: ");
 			menu = scan.nextLine();
 			
-			while( !re.checkBlank(menu) || menu.matches(".*[^0-9]+.*") || (menu.length() > 1) )	//명령어 예외처리
+			while( !checkBlank(menu) || menu.matches(".*[^0-9]+.*") || (menu.length() > 1) )	//명령어 예외처리
 			{
-				if(re.checkBlank(menu)) 
-					System.out.print("잘못된 입력, 다시 입력해주세요(ONLY 숫자, 1글자): ");
-				else
-					System.out.print("다시 입력해주세요: ");
+				System.out.print("잘못된 입력, 다시 입력해주세요(ONLY 숫자, 1글자, 공백제외): ");
 				menu = scan.nextLine();
 			}
 			
@@ -50,6 +46,16 @@ public class InventoryManager {
 				System.out.println("명령어가 옳지 않습니다.\n");
 			}
 		}while(!menu.equals("4"));
+	}
+	
+	public boolean checkBlank(String PayCode)	// 선후 공백 체크
+	{
+	      String B_PayCode=PayCode.replaceAll("\\s+", "");
+	     
+	      if(B_PayCode.equals(PayCode)) 		//공백이 없는 거
+	         return true;
+	      else									//공백이 있는 거
+	    	  return false;
 	}
 	
 }
