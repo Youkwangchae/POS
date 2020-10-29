@@ -17,6 +17,7 @@ public class DisposalRegister {
 	Iterator<String> it; 													//set 검색을 위한 iterator
 	String key, today;														//Set에서 검색을 위한 스트링 변수, 오늘 날짜
 	boolean check = false;													//검색 성공 여부 확인
+	int dis;
 	
 	public DisposalRegister(Db db) throws InterruptedException, IOException
 	{
@@ -64,18 +65,53 @@ public class DisposalRegister {
 			 
 			 if(!answer.equals("완료"))		//완료가 아니면
 			 {
-				 while( !checkBlank(answer) || answer.matches(".*[^a-z A-Z]+.*") || answer.length() != 6 )	//추가 개수 예외처리
+				 do
 				 {
-					 System.out.print("잘못된 입력, 다시 입력해주세요(ONLY 영어, 6글자, 공백제외): ");
-					 answer = scan.nextLine();
-					 if(answer.equals("완료"))		
-						 break;
-				 }
-				 if(!answer.equals("완료"))		//완료가 아니면
-				 {
-					 answer = answer.toUpperCase();
-					 CheckDisposal(answer);
-				 }
+					 while( !checkBlank(answer) || answer.matches(".*[^a-z A-Z]+.*") || answer.length() != 6 )	//폐기 상품코드 예외처리
+					 {
+						 System.out.print("잘못된 입력, 다시 입력해주세요(ONLY 영어, 6글자, 공백제외): ");
+						 answer = scan.nextLine();
+						 if(answer.equals("완료"))		
+							 break;
+					 }
+					 if(!answer.equals("완료"))		//완료가 아니면
+					 {
+							for(int i=0; i < Category.size() ; i++)					//큰 카테고리 개수 만큼의 상품 파일을 읽기
+							{
+								filename = String.valueOf((char) ('A' + i/26) + String.valueOf((char) ('A' + i%26))) + ".txt";
+								products = fileio.readProduct(filename);
+								
+								dis = 3;	//어떠한 상품과 코드가 맞지 않는 상태
+								for(int j = 0; j<products.size(); j++)
+								{
+									if(Integer.parseInt(products.get(j).getEpdate()) < Integer.parseInt(today))		//유통기한 < 오늘 날짜(폐기 대상 상품)
+									{
+										if(products.get(j).getCode().equals(answer))	//입력한 상품과 같다면
+										{
+											dis = 1;
+											break;
+										}																				
+									}
+									else if(products.get(j).getCode().equals(answer))	//폐기 대상은 아닌 상품과 같다면
+									{
+										dis = 2;
+										break;
+									}	
+								}
+								
+							}
+							
+						 if(dis == 1)
+						 {
+							 answer = answer.toUpperCase();
+							 CheckDisposal(answer);
+						 }
+						 else if(dis == 2)
+							 System.out.println("폐기 대상 상품이 아닙니다.");
+						 else
+							 System.out.println("존재하지 않는 상품입니다.");
+					 }
+				 }while(dis != 1);
 			 }
 		}while(!answer.equals("완료"));
 	
@@ -88,12 +124,12 @@ public class DisposalRegister {
 		 String filename, yn;
 			
 		 System.out.print("해당 상품(" + procode + ")을 정말 폐기하시겠습니까?(Y/N) ");
-		 yn = scan.next();
+		 yn = scan.nextLine();
 		 
-		 while(!( yn.equals("Y") || yn.equals("N") ) || checkBlank(yn))
+		 while(!( yn.equals("Y") || yn.equals("N") ) || !checkBlank(yn))
 		 {
-			 System.out.print("잘못된 입력, 다시 입력해주세요(ONLY Y\\N 1글자, 공백제외): ");
-			 procode = scan.next();
+			 System.out.print("잘못된 입력, 다시 입력해주세요(ONLY Y/N 1글자, 공백제외): ");
+			 procode = scan.nextLine();
 		 }
 		 
 		 if(yn.equals("N"))
@@ -115,12 +151,15 @@ public class DisposalRegister {
 				else
 					contents.add(products.get(i).getCode() + "/" + products.get(i).getName() + "/" + products.get(i).getEpdate() + "/" + products.get(i).getPrice()+"\n");
 			 }
-			 
 			 fileio.writeFile(filename, contents);
 		 }
 			 
 	}
-	
+	public boolean DoublecheckDisposlal(String filename)
+	{
+		ArrayList<Product> products = fileio.readProduct(filename);
+		return true;
+	}
 	public boolean checkBlank(String PayCode)	// 선후 공백 체크
 	{
 	      String B_PayCode=PayCode.replaceAll("\\s+", "");
