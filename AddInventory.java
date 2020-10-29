@@ -20,7 +20,7 @@ public class AddInventory {
 	boolean check;															//검색 성공 여부 확인
 	private HashMap<String, NameInfo> products;								//상품이름 저장하는 리스트
 	
-	public AddInventory(Db db)
+	public AddInventory(Db db) throws InterruptedException
 	{
 		this.db = db;
 		products = db.getNames();	
@@ -92,6 +92,7 @@ public class AddInventory {
 			db.addNames(proname);
 		}
 		System.out.println("재고 추가가 완료되었습니다.");
+		System.out.println("재고 관리로 돌아갑니다.\n");
 	}
 	
 	public String FindEp_date(String today, int epd_value)			//유통기한 계산 함수
