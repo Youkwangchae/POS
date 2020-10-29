@@ -210,18 +210,17 @@ public class Refund {
 	}
 
 	public boolean checkBlank(String PayCode) {// 선후 공백 체크
-		for (int i = 0; i < PayCode.length(); i++) {
-			if (PayCode.charAt(i) == ' ') {
-				System.out.println("잘못된 입력 입니다-공백이 들어있습니다");
-				return false;
-			}
+		String B_PayCode=PayCode.replaceAll("\\s+", "");
+		if(B_PayCode.equals(PayCode)) {
+			return true;
 		}
-		return true;
+		System.out.println("잘못된 입력 입니다-공백이 들어있습니다");
+		return false;
 	}
 
 	public boolean checkR_PayCode(String PayCode) { // 실제로 존재하는 결제코드인지 체크
 		String NonBPC = new String(PayCode);
-		NonBPC = NonBPC.replace(" ", "");// 실제 체크를 위해서 공백 체크
+		NonBPC = NonBPC.replaceAll("\\s+", "");// 실제 체크를 위해서 공백 체크
 		for (String key : Product_list.keySet()) {
 			if (key.equals(NonBPC))
 				return true;
