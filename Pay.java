@@ -234,6 +234,11 @@ public class Pay {
 					System.out.println("잘못된 입력입니다. -0은 허용하지 않습니다.");
 					continue;
 				}
+				if(answer.toCharArray().length >= 9) {
+					System.out.println("잘못된 입력입니다. -길이가 9이상입니다.");
+					continue;
+				}
+				
 				
 				
 				int total = getTotalPay();
@@ -291,7 +296,7 @@ public class Pay {
 					break;
 				}
 				else {
-					System.out.println("현금이 부족합니다.");	//현금충전 프롬프트로 넘어가기(아직 미완)
+					System.out.println("현금이 부족합니다.");
 					CashManager cm = new CashManager(db);
 					cm.ManageCash(true);
 				}
@@ -299,6 +304,10 @@ public class Pay {
 			catch(InputMismatchException E) {
 				System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
 				sc.next();
+				continue;
+			}
+			catch(NumberFormatException E) {
+				System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
 				continue;
 			}
 		}
