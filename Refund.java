@@ -105,7 +105,6 @@ public class Refund {
 									int P_price = list.get(index).getPrice();// 상품 가격 가져오기
 									if (list.get(index).getIsPayByCash()) {// 현금 결제인 경우
 										System.out.println(P_price + "원의 현금 환불을 진행합니다.\n......\n");
-										int count2 = 0;
 										for (int i = 7; i >= 0; i--) {
 											int mok = P_price / cm.getKeyindex(i);
 											if (mok == 0)
@@ -113,37 +112,22 @@ public class Refund {
 											else {
 												P_price -= cm.getKeyindex(i) * mok;
 												if (date.getCash().get(cm.getKeyindex(i)) < mok) {
-													while (true) {
 														System.out.print("잔돈이 부족합니다." + cm.getKeyindex(i) + "원이 "
 																+ (mok - date.getCash().get(cm.getKeyindex(i)))
-																+ "개 더 필요합니다. 현금 충전을 진행하시겠습니까? : ");
-														String a = scan.nextLine();
-														setIsCashCharge(a);
-														if (isCashCharge.equals("Y")) {
-															cm.ManageCash(true);
-															break;
-														} else if (isCashCharge.equals("N")) {
-															System.out.println("상품 코드 입력 부분으로 넘어갑니다.");
-															count2 = 1;
-															break;
-														} else {
-															System.out.println("올바르지 않은 입력입니다.");
-														}
-													}
+																+ "개 더 필요합니다. 현금 충전을 진행합니다.\n");
+														cm.ManageCash(true);
 												} else {
-													setIsCashCharge("Y");
 													date.setCash(cm.getKeyindex(i), mok, true);
 												}
 											}
-											if (count2 != 0)
+											if(P_price==0)
 												break;
 										}
 									} else { // 카드 결제인 경우
 										System.out.println(P_price + "원의 카드 환불을 진행합니다\n....\n");
-										isCashCharge = "Y";
 										P_price = 0;
 									}
-									if (isCashCharge.equals("Y") && YN.equals("Y") && (P_price == 0)) {// 현금 환불기능
+									if (YN.equals("Y") && (P_price == 0)) {// 현금 환불기능
 										date.addProduct(list.get(index));
 										list.remove(index);
 										date.removePayment(PayCode, product_code);
