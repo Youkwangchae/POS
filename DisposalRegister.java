@@ -158,11 +158,7 @@ public class DisposalRegister {
 		 }
 			 
 	}
-	public boolean DoublecheckDisposlal(String filename)
-	{
-		ArrayList<Product> products = fileio.readProduct(filename);
-		return true;
-	}
+	
 	public boolean checkBlank(String PayCode)	// 선후 공백 체크
 	{
 	      String B_PayCode=PayCode.replaceAll("\\s+", "");
