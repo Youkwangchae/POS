@@ -33,9 +33,9 @@ public class Manager {
 		{
 			last_date = db.getLast_date();
 			if(isPossible(date, 2))//이전 날짜인지 확인.
-			{
+			{	
 				db.setLast_date(date);//올바른 날짜임을 확인했으니 Date.txt에 넣고, 메인메뉴로 들어옴.
-				m_date=last_date.substring(0,4)+"_"+last_date.substring(4,6)+"_"+last_date.substring(6);
+				m_date=date.substring(0,4)+"_"+date.substring(4,6)+"_"+date.substring(6);
 				start();//메인 메뉴 보여주기.
 			}
 		}
@@ -135,7 +135,7 @@ public class Manager {
 				break;
 			case 4: //4. 현금관리
 				this.c_Manager = new CashManager(db);
-				c_Manager.ManageCash();
+				c_Manager.ManageCash(false);
 				break;
 			case 5: //5. 매출확인
 				totalCash();
@@ -155,11 +155,11 @@ public class Manager {
 		HashMap<String, ArrayList<Product>> pays = db.getPayments();
 		Set <String>keys = pays.keySet();
 		Iterator<String> it = keys.iterator();
-		String key = it.next();
+		String key = "";
 		String date = "";
 		while(it.hasNext()) {
 			key = it.next();
-			date = "20"+it.next().substring(0,6);
+			date = "20"+key.substring(0,6);
 			if(date.equals(last_date)) {
 				for(int j=0;j<pays.get(key).size();j++)
 				total += pays.get(key).get(j).getPrice();
@@ -172,13 +172,14 @@ public class Manager {
 		System.out.println("메인 메뉴로 돌아가시려면 \"완료\"를 입력해주세요. :");
 		String temp = scan.nextLine();
 		
-		while( (!temp.matches("완료")))	//추가 개수 예외처리
+		while( (!temp.matches("완료")))
 		{
 				System.out.print("잘못된 입력, 다시 입력해주세요(ONLY 완료): ");
 				temp = scan.nextLine();
 		}	
 		System.out.println("메인 메뉴로 돌아갑니다.");
 	}
+	
 }
 	
 	
